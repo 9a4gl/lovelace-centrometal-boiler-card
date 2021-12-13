@@ -1,5 +1,5 @@
 
-class PelTecCard extends HTMLElement {
+class LoveacePelTecCard extends HTMLElement {
 
   getFactor() {
     const orig_width = 1024;
@@ -40,7 +40,7 @@ class PelTecCard extends HTMLElement {
 
   createImage(image, left, top, width, height)
   {
-    var str = "<img src=\"/local/peltec-card/" + image + "\" ";
+    var str = "<img src=\"/local/lovelace-peltec-card/images/" + image + "\" ";
     str += this.createStyle("z-index: 1;", left, top, width, height);
     str += " />\n";
     return str;
@@ -78,7 +78,7 @@ class PelTecCard extends HTMLElement {
       var lineHeight = (20 * factor).toString();
       var str = "<div style=\"position: relative; top: 0; left: 0; line-height: " + lineHeight + "px;\">\n";
 
-      str += "<img src=\"/local/peltec-card/background.png\" style=\"width: 100%; position: relative; top: 0; left: 0; position: absolute;\" />\n";
+      str += "<img src=\"/local/lovelace-peltec-card/images/background.png\" style=\"width: 100%; position: relative; top: 0; left: 0; position: absolute;\" />\n";
 
       // cc.params['B_FotV'].v < 1000
       str += this.createImage("vatra.gif", 160, 305, 80, null);
@@ -186,7 +186,7 @@ class PelTecCard extends HTMLElement {
 
       // cc.params['B_STATE'].v &amp;&amp; (cc.params['B_STATE'].v === 'OFF')
       str += this.createText("", 32,
-        "display:block; background-repeat: no-repeat; background-image: url('/local/peltec-card/start_stop.png'); background-position: 0px 0px;",
+        "display:block; background-repeat: no-repeat; background-image: url('/local/lovelace-peltec-card/images/start_stop.png'); background-position: 0px 0px;",
         945, 390, 36, 36);
 
       //cc.params['B_CMD'].v == 0 &amp;&amp; cc.params['B_STATE'].v !== 'OFF'
@@ -219,4 +219,4 @@ class PelTecCard extends HTMLElement {
     }
   }
 
-  customElements.define('peltec-card', PelTecCard);
+customElements.define('lovelace-peltec-card', LoveacePelTecCard);
