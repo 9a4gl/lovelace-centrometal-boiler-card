@@ -1,36 +1,46 @@
 
 class LoveacePelTecCard extends HTMLElement {
 
-  getFactor() {
-    const orig_width = 1024;
-    const orig_height = 580;
-    // const orig_width = 750;
-    // const orig_height = 425;
-    const factor = 468 / orig_width;
-    return factor;
+  computeX(left, orig_width) {
+    return (100.0 * left / orig_width).toString() + "%;";
   }
 
-  createStyle(styleEnd, left, top, width, height) {
-    var factor = this.getFactor();
+  computeY(top, orig_height) {
+    return (100.0 * top / orig_height).toString() + "%;";
+  }
+
+  createStyle(styleEnd, left, top, width, height, orig_width = this.orig_width, orig_height = this.orig_height) {
     var str = "style=\"position: absolute;";
     if (left != null) {
-      str += " left: " + (left * factor).toString() + "px;";
+      if (typeof left === 'string' || left instanceof String) {
+        str += " left: " + left + ";";
+      } else {
+        str += " left: " + this.computeX(left, orig_width);
+      }
     }
     if (top != null) {
-      str += " top: " + (top * factor).toString() + "px;";
+      if (typeof top === 'string' || top instanceof String) {
+        str += " top: " + top + ";";
+      } else {
+        str += " top: " + this.computeY(top, orig_height);
+      }
     }
     if (width != null) {
       if (width === "auto") {
         str += " width: auto;";
+      } else if (typeof width === 'string' || width instanceof String) {
+        str += " width: " + width + ";";
       } else {
-        str += " width: " + (width * factor).toString() + "px;";
+        str += " width: " + this.computeX(width, orig_width);
       }
     }
     if (height != null) {
       if (height === "auto") {
         str += " height: auto;";
+      } else if (typeof height === 'string' || height instanceof String) {
+        str += " height: " + height + ";";
       } else {
-        str += " height: " + (height * factor).toString() + "px;";
+        str += " height: " + this.computeY(height, orig_height);
       }
     }
     str += styleEnd;
@@ -38,21 +48,20 @@ class LoveacePelTecCard extends HTMLElement {
     return str;
   }
 
-  createImage(image, left, top, width, height)
+  createImage(image, left, top, width, height, orig_width = this.orig_width, orig_height = this.orig_height)
   {
     var str = "<img src=\"/local/lovelace-peltec-card/images/" + image + "\" ";
-    str += this.createStyle("z-index: 1;", left, top, width, height);
+    str += this.createStyle("z-index: 1;", left, top, width, height, orig_width, orig_height);
     str += " />\n";
     return str;
   }
 
-  createText(text, font_size, style, left, top, width = null, height = null)
+  createText(text, font_size, style, left, top, width = null, height = null, orig_width = this.orig_width, orig_height = this.orig_height)
   {
-    var factor = this.getFactor();
     var str = "<span ";
-    var extra = "font-size: " + (font_size * factor).toString() + "px;";
+    var extra = "font-size: " + (font_size * this.factor).toString() + "px;";
     extra += " font-family: 'Roboto', 'Helvetica'; text-align: left; vertical-align: top; font-weight: bold; z-index:2;";
-    str += this.createStyle(extra + style, left, top, width, height);
+    str += this.createStyle(extra + style, left, top, width, height, orig_width, orig_height);
     str += ">" + text + "</span>\n";
     return str;
   }
@@ -64,7 +73,7 @@ class LoveacePelTecCard extends HTMLElement {
       if (!this.content) {
         this.innerHTML = `
           <ha-card>
-            <div class="card-content"></div>
+            <div class="card-content" style="padding: 0px;"></div>
           </ha-card>
         `;
         this.content = this.querySelector('div');
@@ -74,11 +83,10 @@ class LoveacePelTecCard extends HTMLElement {
       const state = hass.states[entityId];
       const stateStr = state ? state.state : 'unavailable';
 
-      const factor = this.getFactor();
-      var lineHeight = (20 * factor).toString();
-      var str = "<div style=\"position: relative; top: 0; left: 0; line-height: " + lineHeight + "px;\">\n";
+      var lineHeight = (20 * this.factor).toString();
+      var str = "<div style=\"position: relative; top: 0; left: 0; width: auto; height: auto; line-height: " + lineHeight + "px;\">\n";
 
-      str += "<img src=\"/local/lovelace-peltec-card/images/background.png\" style=\"width: 100%; position: relative; top: 0; left: 0; position: absolute;\" />\n";
+      str += "<img src=\"/local/lovelace-peltec-card/images/background.png\" style=\"width: 100%; top: 0; left: 0; position: relative;\" />\n";
 
       // cc.params['B_FotV'].v < 1000
       str += this.createImage("vatra.gif", 160, 305, 80, null);
@@ -143,31 +151,38 @@ class LoveacePelTecCard extends HTMLElement {
 
       // cc.params['B_addConf'].v | hexBitIsSet: 3
       str += "<div " + this.createStyle("position:absolute; z-index: 2;", 375, 300, 80, 30) + "\">";
-      str += this.createImage("fuel_percentage.png", 0, 0, 99, 28);
-      str += this.createText("---", 20, "color: #000000; z-index: 6;", 30, 3);
+      str += this.createImage("fuel_percentage.png", 0, 0,
+        this.computeX(99, 80), this.computeY(28, 30));
+      str += this.createText("---", 20, "color: #000000; z-index: 6;",
+        this.computeX(30, 80), this.computeY(3, 30), null, null);
       str += "</div>\n";
 
       // (cc.params['B_zlj'].v == 1)
       str += "<div " + this.createStyle("position:absolute; z-index: 2;", 800, 10, 80, 90) + "\">";
-      str += this.createImage("slavina.png", 0, 0, 80, "auto");
+      str += this.createImage("slavina.png", 0, 0, this.computeX(80, 80), "auto");
       str += "</div>\n";
 
       // (cc.params['B_zlj'].v == 0 || cc.params['B_zlj'].v == 2
       str += "<div " + this.createStyle("position:absolute; z-index: 2;", 800, 10, 80, 90) + "\">";
-      str += this.createImage("radijatorSlavina.png", 0, 0, 80, "auto");
+      str += this.createImage("radijatorSlavina.png", 0, 0, this.computeX(80, 80), "auto");
       str += "</div>\n";
 
       // cc.params['B_KONF'].v == 3
       str += "<div " + this.createStyle("position:absolute; z-index: 1;", 520, 5, 370, 570) + "\">";
-      str += this.createText("69 °C", 32, "color: #0000ff;", 110, 290);
-      str += this.createText("67 °C", 32, "color: #0000ff;", 110, 485);
-      str += this.createImage("akunormalno.png", 60, 232, 165, null);
+      str += this.createText("69 °C", 32, "color: #0000ff;",
+        this.computeX(110, 370), this.computeY(290, 570), null, null);
+      str += this.createText("67 °C", 32, "color: #0000ff;",
+        this.computeX(110, 370), this.computeY(485, 570), null, null);
+      str += this.createImage("akunormalno.png",
+        this.computeX(60, 370), this.computeY(232, 570), this.computeX(165, 370), "auto");
       str += "</div>\n";
 
       // (cc.params['B_addConf'].v &amp;&amp; (cc.params['B_korNum'].v != 255))
       str += "<div " + this.createStyle("position:absolute; z-index: 2;", 240, 85, 100, 50) + "\">";
-      str += this.createImage("csk_touch_indicator.png", 15, 0, 68, null);
-      str += this.createText("-", 24, "color: #ffffff; text-align: right; z-index: 3;", 42, 13);
+      str += this.createImage("csk_touch_indicator.png",
+        this.computeX(15, 100), this.computeY(0, 50), this.computeX(68, 100), null);
+      str += this.createText("-", 24, "color: #ffffff; text-align: right; z-index: 3;",
+        this.computeX(43, 100), this.computeY(13, 50));
       str += "</div>\n";
 
       // cc.permissions === '2' &amp;&amp; cc.params['B_STATE'].v &amp;&amp; (cc.params['B_STATE'].v!=='OFF')
@@ -206,10 +221,10 @@ class LoveacePelTecCard extends HTMLElement {
         throw new Error('You need to define an entity');
       }
       this.config = config;
-      this.style.cssText = `
-      display: block;
-      width: 100%
-    `;
+      this.style.cssText = "display: block; width: 100%;";
+      this.orig_width = 1024;
+      this.orig_height = 580;
+      this.factor = 468 / this.orig_width;
     }
 
     // The height of your card. Home Assistant uses this to automatically
