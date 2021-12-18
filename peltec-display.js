@@ -164,10 +164,8 @@ export default class PelTecDisplay {
 
         str += this.createText(mixing_valve_value + "%", 22, "color: #ffffff;", 340, 139, 80);
 
-        if (outdoor_temperature !== false) {
-            str += this.createImage("vanjska.png", 600, 20, 20, "auto");
-            str += this.createText(outdoor_temperature + "°C", 28, "color: #ffffff;", 530, 30);
-        }
+        str += this.createImage("vanjska.png", 600, 20, 20, "auto");
+        str += this.createText(((outdoor_temperature === false) ? "--" : outdoor_temperature) + "°C", 28, "color: #ffffff;", 530, 30);
 
         if (tank_level_value == "Full") {
             // cc.params[ 'B_razina' ].v &amp;&amp; (cc.params['B_razina'].v == 2)
@@ -249,10 +247,12 @@ export default class PelTecDisplay {
             // TIHOTODO
         }
 
+        if (peltec_state === "OFF") {
         // cc.params['B_STATE'].v &amp;&amp; (cc.params['B_STATE'].v === 'OFF')
-        str += this.createText("XXX", 32,
-        "display:block; background-repeat: no-repeat; background-image: url('/local/lovelace-peltec-card/images/start_stop.png'); background-position: 0px 0px;",
-        945, 390, 36, 36);
+            str += this.createText("", 32,
+                "display:block; background-repeat: no-repeat; background-image: url('/local/lovelace-peltec-card/images/start_stop.png'); background-position: 0px 0px;",
+                945, 390, 36, 36);
+        }
 
         if (active_command == 0 && peltec_state !== "OFF") {
             //cc.params['B_CMD'].v == 0 &amp;&amp; cc.params['B_STATE'].v !== 'OFF'

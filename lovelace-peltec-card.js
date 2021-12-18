@@ -18,31 +18,33 @@ class LoveacePelTecCard extends LitElement {
 
   shouldUpdate(changedProperties) {
     if (changedProperties.has("config")) {
-      // console.log("config changed");
+      console.log("config changed");
       return true;
     }
     if (changedProperties.has("hass")) {
-      // console.log("hass changed");
+      console.log("hass changed");
       const oldHass = changedProperties.get("hass");
-      this.parameters.forEach((parameter) => {
-        const oldValue = oldHass.states[parameter];
-        const newValue = this.hass.states[parameter];
+      for (var i = 0; i < this.parameters.length; i++) {
+        const parameter = this.parameters[i];
+        const oldValue = oldHass.states[this.config[parameter]];
+        const newValue = this.hass.states[this.config[parameter]];
         if (oldValue != newValue) {
           console.log("%s : %s != %s", parameter, oldValue.state, newValue.state);
           return true;
         }
-      });
-      this.optional_parameters.forEach((parameter) => {
-        const oldValue = oldHass.states[parameter];
-        const newValue = this.hass.states[parameter];
+      }
+      for (var i = 0; i < this.optional_parameters.length; i++) {
+        const parameter = this.optional_parameters[i];
+        const oldValue = oldHass.states[this.config[parameter]];
+        const newValue = this.hass.states[this.config[parameter]];
         if (oldValue != newValue) {
           console.log("%s : %s != %s", parameter, oldValue.state, newValue.state);
           return true;
         }
-      });
+      };
       return false;
     }
-    // console.log("unknown changed");
+    console.log("unknown changed");
     return false;
   }
 
