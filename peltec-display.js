@@ -1,3 +1,6 @@
+import {
+    html,
+} from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
 export default class PelTecDisplay {
 
@@ -266,6 +269,9 @@ export default class PelTecDisplay {
         }
 
         str += "</div>\n";
-        return str;
+
+        var div = document.createElement('div');
+        div.innerHTML = str.trim();
+        return div.firstChild;
     }
 }
