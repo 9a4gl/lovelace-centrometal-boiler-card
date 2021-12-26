@@ -1,5 +1,6 @@
 {
-  "name": "Centrometal Boiler Display Card",
-  "render_readme": true,
-  "homeassistant": "2021.11.3",
+	"name": "Centrometal Boiler Display Card",
+	"render_readme": true,
+	"homeassistant": "2021.11.3",
+	"filename": "centrometal-boiler-card.js"
 }
