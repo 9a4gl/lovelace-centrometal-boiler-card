@@ -6,7 +6,12 @@ import {
 import PelTecDisplay from "./peltec-display.js"
 
 class LoveaceCentrometalBoilerCard extends LitElement {
-  display = new PelTecDisplay()
+
+  constructor() {
+    super();
+    this.display = new PelTecDisplay()
+    this.detected = { searching: false };
+  }
 
   parameters = [
     "peltec_state", "peltec_fire_sensor", "peltec_fan",
@@ -21,7 +26,8 @@ class LoveaceCentrometalBoilerCard extends LitElement {
   static get properties() {
     return {
       hass: {},
-      config: {}
+      config: {},
+      detected: { type: Object, reflect: true },
     };
   }
 
@@ -36,12 +42,14 @@ class LoveaceCentrometalBoilerCard extends LitElement {
   }
 
   shouldUpdate(changedProperties) {
+    if (this.detected.searching && this.detected.hasOwnProperty("boiler_found")) {
+      this.detected.searching = false
+      return true;
+    }
     if (changedProperties.has("config")) {
-      console.log("config changed");
       return true;
     }
     if (changedProperties.has("hass")) {
-      console.log("hass changed");
       const oldHass = changedProperties.get("hass");
       for (var i = 0; i < this.parameters.length; i++) {
         if (this.hasParameterChanged(oldHass, this.parameters[i])) return true;
@@ -55,8 +63,14 @@ class LoveaceCentrometalBoilerCard extends LitElement {
   }
 
   render() {
-    return html`
-      <ha-card>${this.display.createContent(this.hass, this.config)}</ha-card>`;
+    if (this.detected.hasOwnProperty("boiler_found") == false) {
+      this.detectBoiler();
+      return html`<ha-card style="padding: 20px; text-align: center; height: auto; line-height: 30px;">Detecting Centrometal Boiler ...</ha-card>`;
+    }
+    if (this.detected.boiler_found == false) {
+      return html`<ha-card style="padding: 20px; text-align: center; height: auto; line-height: 30px;">Centrometal Boiler not found, please configure the card manually.</ha-card>`;
+    }
+    return html`<ha-card><p></p>${this.display.createContent(this.hass, this.config)}</ha-card>`;
   }
 
   checkMissingParameters(parameters) {
@@ -69,12 +83,27 @@ class LoveaceCentrometalBoilerCard extends LitElement {
     return missing;
   }
 
+  detectBoiler() {
+    this.detected.searching = true;
+    for (const property in this.hass.states) {
+      if (property.startsWith("sensor.")) {
+        var entity = property.substring(7)
+        if (entity.endsWith("_boiler_state")) {
+          entity = entity.substring(0, entity.length - 13)
+
+          this.detected.boiler_found = entity;
+          this.requestUpdate();
+          return;
+        }
+      }
+    }
+    this.detected.boiler_found = false;
+    this.requestUpdate();
+    return false
+  }
+
   setConfig(config) {
     this.config = config;
-    const missing = this.checkMissingParameters();
-    if (missing.length > 0) {
-      throw new Error("You need to define: " + missing.join(","));
-    }
     this.style.cssText = "display: block;";
   }
 
