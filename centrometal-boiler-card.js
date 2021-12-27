@@ -5,7 +5,7 @@ import {
 
 import PelTecDisplay from "./peltec-display.js"
 
-class LoveacePelTecCard extends LitElement {
+class LoveaceCentrometalBoilerCard extends LitElement {
   display = new PelTecDisplay()
 
   parameters = [
@@ -84,4 +84,4 @@ class LoveacePelTecCard extends LitElement {
 
 }
 
-customElements.define('lovelace-peltec-card', LoveacePelTecCard);
+customElements.define('centrometal-boiler-card', LoveaceCentrometalBoilerCard);

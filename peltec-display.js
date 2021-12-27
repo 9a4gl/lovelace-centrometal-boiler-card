@@ -59,15 +59,16 @@ export default class PelTecDisplay {
     createImage(image, left, top, width, height, orig_width = this.orig_width, orig_height = this.orig_height)
     {
         var style = this.createStyle("z-index: 1;", left, top, width, height, orig_width, orig_height);
-        image = "/local/lovelace-peltec-card/images/" + image;
+        image = "/local/lovelace-centrometal-boiler-card/images/" + image;
         return html`<img src="${image}" style="${style}" />`;
     }
 
     createText(text, font_size, style, left, top, width = null, height = null, orig_width = this.orig_width, orig_height = this.orig_height)
     {
+        // https://github.com/STRML/textFit
         style = this.createStyle(style, left, top, width, height, orig_width, orig_height);
         style += "font-size: " + (font_size * this.factor).toString() + "px;";
-        style += " font-family: 'Roboto', 'Helvetica'; text-align: left; vertical-align: top; font-weight: bold; z-index:2;";
+        style += " font-family: 'Roboto', 'Helvetica'; text-align: center; vertical-align: top; font-weight: bold; z-index:2; margin: auto;";
         return html`<span style="${style}">${text}</span>`;
     }
 
@@ -108,12 +109,12 @@ export default class PelTecDisplay {
 
         return html`
             <div class="card-content" style="position: relative; top: 0; left: 0; padding: 0px; width: auto; height: auto; line-height: ${20 * this.factor}px;">
-            <img src="/local/lovelace-peltec-card/images/background.png" style="width: 100%; top: 0; left: 0; position: relative;" />
+            <img src="/local/lovelace-centrometal-boiler-card/images/background.png" style="width: 100%; top: 0; left: 0; position: relative;" />
             ${this.conditionalHtml(fire_sensor_value < 1000, this.createImage("vatra.gif", 160, 305, 80, null))} <!-- cc.params['B_FotV'].v < 1000 -->
-            ${this.conditionalHtml(fire_sensor_value > 1000, this.createText(">1M", 20, "color: #000000;", 120, 360))} <!-- cc.params['B_FotV'].v >= 0 -->
+            ${this.conditionalHtml(fire_sensor_value > 1000, this.createText(">1M", 24, "color: #000000;", 120, 360))} <!-- cc.params['B_FotV'].v >= 0 -->
             ${this.conditionalHtml(fan_value == 0, this.createImage("ventilatorStoji-unit.png", 35, 210, 100, null))} <!-- cc.params['B_fan'].v == 0 -->
             ${this.conditionalHtml(fan_value != 0, this.createImage("ventilator-unit.gif", 35, 210, 100, null))} <!-- cc.params['B_fan'].v != 0 -->
-            ${this.createText(fan_value, 20, "color: #000000;", 140, 255)}
+            ${this.createText(fan_value, 24, "color: #000000;", 140, 255)}
             ${this.conditionalHtml(boiler_pump_value == 0, this.createImage("pumpaStojiLijevo.png", 345, 212, 66, null))} <!-- cc.params['B_P1'].v == 0 -->
             ${this.conditionalHtml(boiler_pump_value == 1, this.createImage("pumpaokrece.gif", 345, 212, 66, null))} <!-- cc.params['B_P1'].v &amp;&amp; (cc.params['B_P1'].v == 1) -->
             ${this.conditionalHtml(boiler_pump_demand_value == 1, this.createImage("demand_p.png", 345, 240, 12, null))} <!-- cc.params['B_zahP1'].v == 1 -->
@@ -143,7 +144,7 @@ export default class PelTecDisplay {
             ${this.conditionalHtml(active_command == 1 && peltec_state !== "OFF" && peltec_state !== "S7-3", this.createImage("playradi.gif", 942, 390, 40, null))} <!-- cc.params['B_CMD'].v == 1 && cc.params['B_STATE'].v !== 'OFF' && cc.params['B_STATE'].v !== 'S7-3' -->
             ${this.createText(peltec_state, 32, "color: #ffffff; text-align: center; z-index: 3;", 900, 360, 120)}
             ${this.conditionalHtml(peltec_state === "OFF", this.createText("", 32,
-                "display:block; background-repeat: no-repeat; background-image: url('/local/lovelace-peltec-card/images/start_stop.png'); background-position: 0px 0px;",
+                "display:block; background-repeat: no-repeat; background-image: url('/local/lovelace-centrometal-boiler-card/images/start_stop.png'); background-position: 0px 0px;",
                 945, 390, 36, 36))} <!-- cc.params['B_STATE'].v &amp;&amp; (cc.params['B_STATE'].v === 'OFF') -->
             ${this.conditionalHtml(active_command == 0 && peltec_state !== "OFF", this.createImage("stopradi.gif", 942, 390, 36, "auto"))} <!-- cc.params['B_CMD'].v == 0 &amp;&amp; cc.params['B_STATE'].v !== 'OFF' -->
             </div>`;
