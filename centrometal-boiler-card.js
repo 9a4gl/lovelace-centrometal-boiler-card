@@ -3,14 +3,15 @@ import {
   LitElement,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import PelTecDisplay from "./peltec-display.js"
+import { PelTecDisplay } from "./peltec.js"
+import { configurePelTecBoiler } from "./peltec.js"
 
 class LoveaceCentrometalBoilerCard extends LitElement {
 
   constructor() {
     super();
     this.display = new PelTecDisplay()
-    this.detected = { searching: false };
+    this.configured = false;
   }
 
   parameters = [
@@ -27,7 +28,6 @@ class LoveaceCentrometalBoilerCard extends LitElement {
     return {
       hass: {},
       config: {},
-      detected: { type: Object, reflect: true },
     };
   }
 
@@ -42,10 +42,6 @@ class LoveaceCentrometalBoilerCard extends LitElement {
   }
 
   shouldUpdate(changedProperties) {
-    if (this.detected.searching && this.detected.hasOwnProperty("boiler_found")) {
-      this.detected.searching = false
-      return true;
-    }
     if (changedProperties.has("config")) {
       return true;
     }
@@ -62,13 +58,40 @@ class LoveaceCentrometalBoilerCard extends LitElement {
     return false;
   }
 
-  render() {
-    if (this.detected.hasOwnProperty("boiler_found") == false) {
-      this.detectBoiler();
-      return html`<ha-card style="padding: 20px; text-align: center; height: auto; line-height: 30px;">Detecting Centrometal Boiler ...</ha-card>`;
+  configureBoiler() {
+    if (!("device_type" in this.config)) {
+      for (const property in this.hass.states) {
+        if (property.startsWith("sensor.")) {
+          var entity = property.substring(7)
+          if (entity.endsWith("_device_type")) {
+            var prefix = entity.substring(0, entity.length - 12)
+            this.config["device_type"] = this.hass.states[property].state
+            break;
+          }
+        }
+      }
     }
-    if (this.detected.boiler_found == false) {
-      return html`<ha-card style="padding: 20px; text-align: center; height: auto; line-height: 30px;">Centrometal Boiler not found, please configure the card manually.</ha-card>`;
+
+    if (!("device_type" in this.config)) {
+      return "Centrometal boiler not found, please configure the card manually.";
+    }
+
+    switch (this.config["device_type"].toLowerCase()) {
+      case 'peltec':
+        return configurePelTecBoiler(this.config);
+    }
+
+    return "Boiler type not suppored: " + this.config["device_type"] + ".";
+  }
+
+  render() {
+    if (this.configured === false) {
+      var error_message = this.configureBoiler();
+      this.configured = error_message === true || error_message.length == 0;
+      if (!this.configured) {
+        return html`<ha-card style="height: auto;"><h1 class="card-header">Centrometal Boiler Card</h1><p style="padding: 20px; line-height: 30px;">Error: ${error_message}</p></ha-card>`;
+      }
+      this.configured = true;
     }
     return html`<ha-card><p></p>${this.display.createContent(this.hass, this.config)}</ha-card>`;
   }
@@ -83,27 +106,8 @@ class LoveaceCentrometalBoilerCard extends LitElement {
     return missing;
   }
 
-  detectBoiler() {
-    this.detected.searching = true;
-    for (const property in this.hass.states) {
-      if (property.startsWith("sensor.")) {
-        var entity = property.substring(7)
-        if (entity.endsWith("_boiler_state")) {
-          entity = entity.substring(0, entity.length - 13)
-
-          this.detected.boiler_found = entity;
-          this.requestUpdate();
-          return;
-        }
-      }
-    }
-    this.detected.boiler_found = false;
-    this.requestUpdate();
-    return false
-  }
-
   setConfig(config) {
-    this.config = config;
+    this.config = { ...config };
     this.style.cssText = "display: block;";
   }
 

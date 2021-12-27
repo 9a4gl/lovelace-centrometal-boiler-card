@@ -2,7 +2,11 @@ import {
     html,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-export default class PelTecDisplay {
+export function configurePelTecBoiler(config, prefix) {
+    return true;
+}
+
+export class PelTecDisplay {
 
     constructor() {
         this.orig_width = 1024;
