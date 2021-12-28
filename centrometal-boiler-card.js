@@ -4,25 +4,13 @@ import {
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
 import { PelTecDisplay } from "./peltec.js"
-import { configurePelTecBoiler } from "./peltec.js"
 
 class LoveaceCentrometalBoilerCard extends LitElement {
 
   constructor() {
     super();
-    this.display = new PelTecDisplay()
     this.configured = false;
   }
-
-  parameters = [
-    "peltec_state", "peltec_fire_sensor", "peltec_fan",
-    "peltec_boiler_pump", "peltec_boiler_pump_demand", "peltec_electric_heater",
-    "peltec_buffer_tank_temparature_up", "peltec_buffer_tank_temparature_down",
-    "peltec_lambda_sensor", "peltec_tank_level", "peltec_configuration",
-    "peltec_boiler_temperature", "peltec_mixer_temperature", "peltec_mixing_valve",
-    "peltec_flue_gas", "peltec_active_command"];
-
-  optional_parameters = [ "peltec_outdoor_temperature" ]
 
   static get properties() {
     return {
@@ -48,17 +36,21 @@ class LoveaceCentrometalBoilerCard extends LitElement {
     if (changedProperties.has("hass")) {
       const oldHass = changedProperties.get("hass");
       for (var i = 0; i < this.parameters.length; i++) {
-        if (this.hasParameterChanged(oldHass, this.parameters[i])) return true;
+        if (this.hasParameterChanged(oldHass, this.parameters[i])) {
+          return true;
+        }
       }
       for (var i = 0; i < this.optional_parameters.length; i++) {
-        if (this.hasParameterChanged(oldHass, this.optional_parameters[i])) return true;
-      };
+        if (this.hasParameterChanged(oldHass, this.optional_parameters[i])) {
+          return true;
+        }
+      }
       return false;
     }
     return false;
   }
 
-  configureBoiler() {
+  configureDisplay() {
     if (!("device_type" in this.config)) {
       for (const property in this.hass.states) {
         if (property.startsWith("sensor.")) {
@@ -78,7 +70,7 @@ class LoveaceCentrometalBoilerCard extends LitElement {
 
     switch (this.config["device_type"].toLowerCase()) {
       case 'peltec':
-        return configurePelTecBoiler(this.config);
+        return new PelTecDisplay(this.config).configureDisplay(this.hass);
     }
 
     return "Boiler type not suppored: " + this.config["device_type"] + ".";
@@ -86,24 +78,16 @@ class LoveaceCentrometalBoilerCard extends LitElement {
 
   render() {
     if (this.configured === false) {
-      var error_message = this.configureBoiler();
-      this.configured = error_message === true || error_message.length == 0;
-      if (!this.configured) {
-        return html`<ha-card style="height: auto;"><h1 class="card-header">Centrometal Boiler Card</h1><p style="padding: 20px; line-height: 30px;">Error: ${error_message}</p></ha-card>`;
+      this.display = this.configureDisplay();
+      if (typeof this.display === 'string' || this.display instanceof String) {
+        return html`
+          <ha-card style="height: auto;">
+            <h1 class="card-header">Centrometal Boiler Card</h1>
+            <p style="padding: 20px; line-height: 30px;">Error: ${this.display}</p></ha-card>`;
       }
       this.configured = true;
     }
     return html`<ha-card><p></p>${this.display.createContent(this.hass, this.config)}</ha-card>`;
-  }
-
-  checkMissingParameters(parameters) {
-    var missing = [];
-    this.parameters.forEach((parameter) => {
-      if (!(parameter in this.config)) {
-        missing.push(parameter);
-      }
-    });
-    return missing;
   }
 
   setConfig(config) {
