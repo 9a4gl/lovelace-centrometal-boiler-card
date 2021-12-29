@@ -97,7 +97,8 @@ export class PelTecDisplay extends Display {
             ${this.conditionalHtml(
                 "lambda_sensor" in this.values && this.values["lambda_sensor"] > 0.1,
                 html`${this.createImage("peltec/senzor_b_1.png", 90, 90, 50, null)} <!-- (cc.params['B_Oxy1'].v &amp;&amp; (cc.params['B_Oxy1'].v > 0.1 )) -->
-                     ${this.createText(html`${this.values["lambda_sensor"]}% O<sub>2</sub>`, 20, "color: #e0e3ff;", 155, 90) }`)} <!-- cc.params['B_Oxy1'].v &amp;&amp; (cc.params['B_Oxy1'].v >= 0.1) -->
+                     ${this.createText(html`
+                        ${this.values["lambda_sensor"] < 25.4 ? this.values["lambda_sensor"] : "-"}% O<sub>2</sub>`, 20, "color: #e0e3ff;", 155, 90)}`)} <!-- cc.params['B_Oxy1'].v &amp;&amp; (cc.params['B_Oxy1'].v >= 0.1) -->
 
             <!-- Outdoor temperature -->
             ${this.createImage("cmpelet/vanjska.png", 600, 20, 20, "auto")}
