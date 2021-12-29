@@ -9,20 +9,21 @@ export class Display {
         this.orig_width = 1024;
         this.orig_height = 580;
         this.factor = 468 / this.orig_width;
+        this.card_id = "id_" + Math.random().toString(16).slice(2)
         this.parameters = {}
         this.values = {}
     }
 
     // Parameters related helpers
 
-    configureParameter(hass, name, opt = "") {
+    configureParameter(hass, starts_with, name, opt = "") {
         if (name in this.config) {
             this.parameters[name] = this.config[name];
             return this.config[name];
         }
 
         for (const property in hass.states) {
-            if (property.startsWith("sensor.peltec") && property.endsWith(name)) {
+            if (property.startsWith(starts_with) && property.endsWith(name)) {
                 this.parameters[name] = property;
                 return property;
             }
@@ -119,12 +120,12 @@ export class Display {
         return html`<img src="${image}" style="${style}" />`;
     }
 
-    createText(text, font_size, style, left, top, width = null, height = null, orig_width = this.orig_width, orig_height = this.orig_height)
+    createText(text, font_size, style, left, top, width = null, height = null, orig_width = this.orig_width, orig_height = this.orig_height, zindex = 2)
     {
         // https://github.com/STRML/textFit ?
         style = this.createStyle(style, left, top, width, height, orig_width, orig_height);
         style += "font-size: " + (font_size * this.factor).toString() + "px;";
-        style += " font-family: 'Roboto', 'Helvetica'; text-align: center; vertical-align: top; font-weight: bold; z-index:2; margin: auto;";
+        style += " font-family: 'Roboto', 'Helvetica'; text-align: center; vertical-align: top; font-weight: bold; z-index:" + zindex + "; margin: auto;";
         return html`<span style="${style}">${text}</span>`;
     }
 

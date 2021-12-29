@@ -8,23 +8,25 @@ export class PelTecDisplay extends Display {
 
     configureDisplay(hass) {
         try {
-            this.configureParameter(hass, "boiler_state")
-            this.configureParameter(hass, "command_active")
-            this.configureParameter(hass, "fire_sensor")
-            this.configureParameter(hass, "fan")
-            this.configureParameter(hass, "boiler_pump")
-            this.configureParameter(hass, "boiler_pump_demand")
-            this.configureParameter(hass, "electric_heater")
-            this.configureParameter(hass, "boiler_temperature")
-            this.configureParameter(hass, "flue_gas")
-            this.configureParameter(hass, "mixer_temperature")
-            this.configureParameter(hass, "mixing_valve")
+            this.configureParameter(hass, "sensor.peltec", "boiler_state")
+            this.configureParameter(hass, "sensor.peltec", "command_active")
+            this.configureParameter(hass, "sensor.peltec", "fire_sensor")
+            this.configureParameter(hass, "sensor.peltec", "fan")
+            this.configureParameter(hass, "sensor.peltec", "boiler_pump")
+            this.configureParameter(hass, "sensor.peltec", "boiler_pump_demand")
+            this.configureParameter(hass, "sensor.peltec", "electric_heater")
+            this.configureParameter(hass, "sensor.peltec", "boiler_temperature")
+            this.configureParameter(hass, "sensor.peltec", "flue_gas")
+            this.configureParameter(hass, "sensor.peltec", "mixer_temperature")
+            this.configureParameter(hass, "sensor.peltec", "mixing_valve")
             // optional
-            this.configureParameter(hass, "lambda_sensor", "optional")
-            this.configureParameter(hass, "outdoor_temperature", "optional")
-            this.configureParameter(hass, "tank_level", "optional")
-            this.configureParameter(hass, "buffer_tank_temparature_up", "optional")
-            this.configureParameter(hass, "buffer_tank_temparature_down", "optional")
+            this.configureParameter(hass, "sensor.peltec", "lambda_sensor", "optional")
+            this.configureParameter(hass, "sensor.peltec", "outdoor_temperature", "optional")
+            this.configureParameter(hass, "sensor.peltec", "tank_level", "optional")
+            this.configureParameter(hass, "sensor.peltec", "buffer_tank_temparature_up", "optional")
+            this.configureParameter(hass, "sensor.peltec", "buffer_tank_temparature_down", "optional")
+            // Service
+            this.configureParameter(hass, "switch.peltec", "boiler_switch")
         } catch (error) {
             return error;
         }
@@ -35,21 +37,10 @@ export class PelTecDisplay extends Display {
     {
         this.updateParameterValues(hass);
 
-        if (this.values["boiler_state"] == "OFF") {
-            // cc.isLive &amp;&amp; cc.permissions === '2' &amp;&amp; cc.params['B_STATE'].v===undefined || (cc.params['B_STATE'].v==='OFF')
-            // TURN ON BUTTON
-            // TIHOTODO
-        }
-        if (this.values["boiler_state"] !== "OFF") {
-            // cc.isLive &amp;&amp; cc.permissions === '2' &amp;&amp; cc.params['B_STATE'].v &amp;&amp; (cc.params['B_STATE'].v!=='OFF')
-            // TURN OFF BUTTON
-            // TIHOTODO
-        }
-
         return html`
             <div class="card-content" style="position: relative; top: 0; left: 0; padding: 0px; width: auto; height: auto; line-height: ${20 * this.factor}px;">
             <img src="/local/lovelace-centrometal-boiler-card/images/peltec/background.png" style="width: 100%; top: 0; left: 0; position: relative;" />
-            ${this.createText(this.values["boiler_temperature"] + " °C", 42, "color: #FFFFFF;",  100, 157)}
+            ${this.createText(this.values["boiler_temperature"] + " °C", 42, "color: #FFFFFF;", 100, 157)}
             ${this.createImage("peltec/senzor_b_1.png", 90, 40, 50, null)}
             ${this.createText(this.values["flue_gas"] + " °C", 26, "color: #FFFFFF;",  155, 44)}
             ${this.createImage("peltec/senzor_d.png", 425, 240, 30, null)}
@@ -116,12 +107,57 @@ export class PelTecDisplay extends Display {
             <!-- Buffer -->
             ${this.conditionalHtml(
                 "buffer_tank_temparature_up" in this.values && "buffer_tank_temparature_down" in this.values,
-                html`<div style="${this.createStyle("z-index: 1;", 520, 5, 370, 570)}">
+                html`<div style="${this.createStyle("z-index: 2;", 520, 5, 370, 570)}">
                      ${this.createText(this.values["buffer_tank_temparature_up"] + " °C", 32, "color: #0000ff;", this.computeX(100, 370), this.computeY(290, 570), null, null)}
                      ${this.createText(this.values["buffer_tank_temparature_down"] + " °C", 32, "color: #0000ff;", this.computeX(100, 370), this.computeY(485, 570), null, null)}
                      ${this.createImage("peltec/akunormalno.png", this.computeX(60, 370), this.computeY(232, 570), this.computeX(165, 370), "auto")}
                      </div>`)} <!-- cc.params['B_KONF'].v == 3 -->
 
+            <!-- Boiler power button -->
+            <button
+                style="${this.createStyle("margin: 0; border: 0px; vertical-align: top; z-index: 5; background-color: rgba(255,255,255,0.0);", 900, 320, 120, 260)}"
+                @click="${this.toggleBoilerOnOff}"></button>
+
+            <!-- Turn On / Turn Off / Cancel popup -->
+            <div id="${this.card_id}_popup" style="${this.createStyle("display: none; z-index: 100; background-color: rgba(222, 222, 222, 0.75);", 20, 20, this.orig_width - 40, this.orig_height - 40)}">
+                <div style="position: absolute; margin: 0; top: 50%; left: 50%; text-align: center; transform: translate(-50%, -50%); width: 100%;">
+                    <button id="${this.card_id}_on_button" type="button" @click="${this.handleTurnOn}" style="display: inline; margin: auto; width:auto; padding: 10px;">TURN ON</button>
+                    <button id="${this.card_id}_off_button" type="button" @click="${this.handleTurnOff}" style="display: none; margin: auto; width:auto; padding: 10px;">TURN OFF</button>
+                    <p style="display: inline-block; width: 50px;"></p>
+                    <button type="button" @click="${this.hidePopup}" style="display: inline; margin: auto; width:auto; padding: 10px;">CANCEL</button>
+                </div>
+            </div>
             </div>`;
+    }
+
+    toggleBoilerOnOff() {
+        var popup = this.shadowRoot.getElementById(this.display.card_id + "_popup");
+        var on = this.shadowRoot.getElementById(this.display.card_id + "_on_button");
+        var off = this.shadowRoot.getElementById(this.display.card_id + "_off_button");
+        if (this.display.values["boiler_state"] == "OFF") {
+            on.style.display = "inline";
+            off.style.display = "none";
+        } else {
+            on.style.display = "none";
+            off.style.display = "inline";
+        }
+        popup.style.display = "block";
+    }
+
+    handleTurnOn() {
+        this.hass.callService("switch", "turn_on", {entity_id: this.display.parameters["boiler_switch"]});
+        var popup = this.shadowRoot.getElementById(this.display.card_id + "_popup");
+        popup.style.display = "none";
+    }
+
+    handleTurnOff() {
+        this.hass.callService("switch", "turn_off", {entity_id: this.display.parameters["boiler_switch"]});
+        var popup = this.shadowRoot.getElementById(this.display.card_id + "_popup");
+        popup.style.display = "none";
+    }
+
+    hidePopup() {
+        var popup = this.shadowRoot.getElementById(this.display.card_id + "_popup");
+        popup.style.display = "none";
     }
 }
