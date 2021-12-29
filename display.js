@@ -13,11 +13,14 @@ export class Display {
         this.values = {}
     }
 
+    // Parameters related helpers
+
     configureParameter(hass, name, opt = "") {
         if (name in this.config) {
             this.parameters[name] = this.config[name];
             return this.config[name];
         }
+
         for (const property in hass.states) {
             if (property.startsWith("sensor.peltec") && property.endsWith(name)) {
                 this.parameters[name] = property;
@@ -36,8 +39,29 @@ export class Display {
         this.values = {}
         for (const [key, value] of Object.entries(this.parameters)) {
             this.values[key] = hass.states[value].state
-          }
+        }
     }
+
+    hasParameterChanged(oldHass, hass, name, entity) {
+        const oldValue = oldHass.states[entity];
+        const newValue = hass.states[entity];
+        if (oldValue != newValue) {
+          console.log("%s : %s -> %s", name, oldValue.state, newValue.state);
+          return true;
+        }
+        return false;
+    }
+
+    shouldUpdate(oldHass, hass) {
+        for (const [name, entity] of Object.entries(this.parameters)) {
+          if (this.hasParameterChanged(oldHass, hass, name, entity)) {
+            return true;
+          }
+        }
+        return false;
+    }
+
+    // UI related helpers
 
     computeX(left, orig_width) {
         return (100.0 * left / orig_width).toString() + "%;";

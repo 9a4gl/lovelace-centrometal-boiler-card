@@ -9,6 +9,7 @@ class LoveaceCentrometalBoilerCard extends LitElement {
 
   constructor() {
     super();
+    this.display = null;
     this.configured = false;
   }
 
@@ -19,33 +20,17 @@ class LoveaceCentrometalBoilerCard extends LitElement {
     };
   }
 
-  hasParameterChanged(oldHass, parameter) {
-    const oldValue = oldHass.states[this.config[parameter]];
-    const newValue = this.hass.states[this.config[parameter]];
-    if (oldValue != newValue) {
-      console.log("%s : %s != %s", parameter, oldValue.state, newValue.state);
-      return true;
-    }
-    return false;
-  }
-
   shouldUpdate(changedProperties) {
     if (changedProperties.has("config")) {
       return true;
     }
     if (changedProperties.has("hass")) {
-      const oldHass = changedProperties.get("hass");
-      for (var i = 0; i < this.parameters.length; i++) {
-        if (this.hasParameterChanged(oldHass, this.parameters[i])) {
+      if (this.display != null) {
+        const oldHass = changedProperties.get("hass");
+        if (this.display.shouldUpdate(oldHass, this.hass)) {
           return true;
         }
       }
-      for (var i = 0; i < this.optional_parameters.length; i++) {
-        if (this.hasParameterChanged(oldHass, this.optional_parameters[i])) {
-          return true;
-        }
-      }
-      return false;
     }
     return false;
   }
