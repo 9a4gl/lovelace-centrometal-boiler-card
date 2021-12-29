@@ -46,8 +46,11 @@ export class Display {
         const oldValue = oldHass.states[entity];
         const newValue = hass.states[entity];
         if (oldValue != newValue) {
-          console.log("%s : %s -> %s", name, oldValue.state, newValue.state);
-          return true;
+            var currentdate = new Date();
+            const zeroPad = (num, places) => String(num).padStart(places, '0')
+            var datetime = zeroPad(currentdate.getHours(), 2) + ":"  + zeroPad(currentdate.getMinutes(), 2) + ":" + zeroPad(currentdate.getSeconds(), 2);
+            console.log(datetime + " %s : %s -> %s", name, oldValue.state, newValue.state);
+            return true;
         }
         return false;
     }
