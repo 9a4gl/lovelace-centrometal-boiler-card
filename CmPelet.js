@@ -45,7 +45,7 @@ export class CmPeletDisplay extends Display {
             <div class="card-content" style="position: relative; top: 0; left: 0; padding: 0px; width: auto; height: auto; line-height: ${20 * this.factor}px;">
             <img src="/local/lovelace-centrometal-boiler-card/images/cmpelet/peletsetdisplay-clean.png" style="width: 100%; top: 0; left: 0; position: relative;" />
 
-            ${this.conditionalHtml(
+            ${this.conditional(
                 this.values["firmware_version"] > 'v1.25' && this.values["b_cp"] == 1,
                 this.createImage("cmpelet/boiler_centroplus.png", -1, 9, 347, null, 0)
             )}

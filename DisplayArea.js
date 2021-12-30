@@ -12,7 +12,7 @@ export class DisplayArea {
         this.factor = 468 / 1024; // Used for font scaling
     }
 
-    computePercentage(pos, full) {
+    asPercentage(pos, full) {
         return (100.0 * pos / full).toString() + "%;";
     }
 
@@ -22,14 +22,14 @@ export class DisplayArea {
             if (typeof left === 'string' || left instanceof String) {
                 str += " left: " + left + ";";
             } else {
-                str += " left: " + this.computePercentage(left, this.area_width);
+                str += " left: " + this.asPercentage(left, this.area_width);
             }
         }
         if (top != null) {
             if (typeof top === 'string' || top instanceof String) {
                 str += " top: " + top + ";";
             } else {
-                str += " top: " + this.computePercentage(top, this.area_height);
+                str += " top: " + this.asPercentage(top, this.area_height);
             }
         }
         if (width != null) {
@@ -38,7 +38,7 @@ export class DisplayArea {
             } else if (typeof width === 'string' || width instanceof String) {
                 str += " width: " + width + ";";
             } else {
-                str += " width: " + this.computePercentage(width, this.area_width);
+                str += " width: " + this.asPercentage(width, this.area_width);
             }
         }
         if (height != null) {
@@ -47,7 +47,7 @@ export class DisplayArea {
             } else if (typeof height === 'string' || height instanceof String) {
                 str += " height: " + height + ";";
             } else {
-                str += " height: " + this.computePercentage(height, this.area_height);
+                str += " height: " + this.asPercentage(height, this.area_height);
             }
         }
         str += styleEnd;
@@ -69,7 +69,7 @@ export class DisplayArea {
         return html`<span style="${style}">${text}</span>`;
     }
 
-    conditionalHtml(cond, expr) {
+    conditional(cond, expr) {
         return cond ? expr : html``;
     }
 }
