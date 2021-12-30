@@ -47,7 +47,7 @@ export class CmPeletDisplay extends Display {
 
             ${this.conditionalHtml(
                 this.values["firmware_version"] > 'v1.25' && this.values["b_cp"] == 1,
-                this.createImage("cmpelet/boiler_centroplus.png", -1, 9, 347, null, this.orig_width, this.orig_height, 0)
+                this.createImage("cmpelet/boiler_centroplus.png", -1, 9, 347, null, 0)
             )}
 
             </div>`;

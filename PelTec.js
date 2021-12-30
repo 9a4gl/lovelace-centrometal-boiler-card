@@ -3,8 +3,7 @@ import {
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
 import { Display } from "./Display.js"
-import { DisplayArea } from "./DisplayArea.js"
-import { DisplaySubArea } from "./DisplayArea.js"
+import { DisplaySubArea } from "./DisplaySubArea.js"
 
 export class PelTecDisplay extends Display {
 
@@ -68,20 +67,33 @@ export class PelTecDisplay extends Display {
             ${this.conditionalHtml(this.values["boiler_pump_demand"] == 1, this.createImage("peltec/demand_p.png", 345, 240, 12, null))}
 
             <!-- Fire -->
-            ${this.conditionalHtml(this.values["fire_sensor"] > 1000, this.createText(">1M", 20, "color: #000000;", 120, 360))}
-            ${this.conditionalHtml(this.values["fire_sensor"] < 1000,
+            ${this.conditionalHtml(
+                this.values["fire_sensor"] > 1000,
+                this.createText(">1M", 20, "color: #000000;", 120, 360))}
+            ${this.conditionalHtml(
+                this.values["fire_sensor"] < 1000,
                 html`${this.createText(this.values["fire_sensor"] + "k", 20, "color: #000000;", 120, 360)}
                      ${this.createImage("peltec/vatra.gif", 160, 305, 80, null)}`)}
 
             <!-- Button -->
-            ${this.conditionalHtml(this.values["boiler_state"] !== "OFF", this.createImage("peltec/start.gif", 901, 440, 118, null))}
-            ${this.conditionalHtml(this.values["command_active"] == 1 && this.values["boiler_state"] == "S7-3", this.createImage("peltec/pauza.png", 942, 390, 40, null))}
-            ${this.conditionalHtml(this.values["command_active"] == 1 && this.values["boiler_state"] !== "OFF" && this.values["boiler_state"] !== "S7-3", this.createImage("peltec/playradi.gif", 942, 390, 40, null))}
+            ${this.conditionalHtml(
+                this.values["boiler_state"] !== "OFF",
+                this.createImage("peltec/start.gif", 901, 440, 118, null))}
+            ${this.conditionalHtml(
+                this.values["command_active"] == 1 && this.values["boiler_state"] == "S7-3",
+                this.createImage("peltec/pauza.png", 942, 390, 40, null))}
+            ${this.conditionalHtml(
+                this.values["command_active"] == 1 && this.values["boiler_state"] !== "OFF" && this.values["boiler_state"] !== "S7-3",
+                this.createImage("peltec/playradi.gif", 942, 390, 40, null))}
             ${this.createText(this.values["boiler_state"], 32, "color: #ffffff; text-align: center; z-index: 3;", 900, 360, 120)}
-            ${this.conditionalHtml(this.values["boiler_state"] === "OFF", this.createText("", 32,
+            ${this.conditionalHtml(
+                this.values["boiler_state"] === "OFF",
+                this.createText("", 32,
                 "display:block; background-repeat: no-repeat; background-image: url('/local/lovelace-centrometal-boiler-card/images/peltec/start_stop.png'); background-position: 0px 0px;",
                 945, 390, 36, 36))}
-            ${this.conditionalHtml(this.values["command_active"] == 0 && this.values["boiler_state"] !== "OFF", this.createImage("peltec/stopradi.gif", 942, 390, 36, "auto"))}
+            ${this.conditionalHtml(
+                this.values["command_active"] == 0 && this.values["boiler_state"] !== "OFF",
+                this.createImage("peltec/stopradi.gif", 942, 390, 36, "auto"))}
 
             <!-- Fan -->
             ${this.createText(

@@ -16,20 +16,20 @@ export class DisplayArea {
         return (100.0 * pos / full).toString() + "%;";
     }
 
-    createStyle(styleEnd, left, top, width, height, area_width = this.area_width, area_height = this.area_height) {
+    createStyle(styleEnd, left, top, width, height) {
         var str = "position: absolute;";
         if (left != null) {
             if (typeof left === 'string' || left instanceof String) {
                 str += " left: " + left + ";";
             } else {
-                str += " left: " + this.computePercentage(left, area_width);
+                str += " left: " + this.computePercentage(left, this.area_width);
             }
         }
         if (top != null) {
             if (typeof top === 'string' || top instanceof String) {
                 str += " top: " + top + ";";
             } else {
-                str += " top: " + this.computePercentage(top, area_height);
+                str += " top: " + this.computePercentage(top, this.area_height);
             }
         }
         if (width != null) {
@@ -38,7 +38,7 @@ export class DisplayArea {
             } else if (typeof width === 'string' || width instanceof String) {
                 str += " width: " + width + ";";
             } else {
-                str += " width: " + this.computePercentage(width, area_width);
+                str += " width: " + this.computePercentage(width, this.area_width);
             }
         }
         if (height != null) {
@@ -47,23 +47,23 @@ export class DisplayArea {
             } else if (typeof height === 'string' || height instanceof String) {
                 str += " height: " + height + ";";
             } else {
-                str += " height: " + this.computePercentage(height, area_height);
+                str += " height: " + this.computePercentage(height, this.area_height);
             }
         }
         str += styleEnd;
         return str;
     }
 
-    createImage(image, left, top, width, height, area_width = this.area_width, area_height = this.area_height, zindex = 1)
+    createImage(image, left, top, width, height, zindex = 1)
     {
-        var style = this.createStyle("z-index: " + zindex + ";", left, top, width, height, area_width, area_height);
+        var style = this.createStyle("z-index: " + zindex + ";", left, top, width, height);
         image = "/local/lovelace-centrometal-boiler-card/images/" + image;
         return html`<img src="${image}" style="${style}" />`;
     }
 
-    createText(text, font_size, style, left, top, width = null, height = null, area_width = this.area_width, area_height = this.area_height, zindex = 2)
+    createText(text, font_size, style, left, top, width = null, height = null, zindex = 2)
     {
-        style = this.createStyle(style, left, top, width, height, area_width, area_height);
+        style = this.createStyle(style, left, top, width, height);
         style += "font-size: " + (font_size * this.factor).toString() + "px;";
         style += " font-family: 'Roboto', 'Helvetica'; text-align: center; vertical-align: top; font-weight: bold; z-index:" + zindex + "; margin: auto;";
         return html`<span style="${style}">${text}</span>`;
@@ -73,24 +73,3 @@ export class DisplayArea {
         return cond ? expr : html``;
     }
 }
-
-export class DisplaySubArea extends DisplayArea {
-
-    constructor(parent, posx, posy, width, height) {
-        super(posx, posy, width, height)
-        this.parent = parent
-    }
-
-    createSubArea(z, extraStyle = "", content) {
-        return html`
-        <div style="${this.createStyle(
-            " z-index: " + z + ";" + extraStyle,
-            this.computePercentage(this.area_posx, this.parent.area_width),
-            this.computePercentage(this.area_posy, this.parent.area_height),
-            this.computePercentage(this.area_width, this.parent.area_width),
-            this.computePercentage(this.area_height, this.parent.area_height))}">
-            ${content}
-        </div>`
-    }
-}
-
