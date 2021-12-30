@@ -3,7 +3,8 @@ import {
   LitElement,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import { PelTecDisplay } from "./peltec.js"
+import { PelTecDisplay } from "./PelTec.js"
+import { CmPeletDisplay } from "./CmPelet.js"
 
 class LoveaceCentrometalBoilerCard extends LitElement {
 
@@ -25,6 +26,12 @@ class LoveaceCentrometalBoilerCard extends LitElement {
       return true;
     }
     if (changedProperties.has("hass")) {
+      if (this.display === null) {
+          return false
+      }
+      if (typeof this.display === 'string' || this.display instanceof String) {
+        return false;
+      }
       if (this.display != null) {
         const oldHass = changedProperties.get("hass");
         if (this.display.shouldUpdate(oldHass, this.hass)) {
@@ -56,6 +63,9 @@ class LoveaceCentrometalBoilerCard extends LitElement {
     switch (this.config["device_type"].toLowerCase()) {
       case 'peltec':
         return new PelTecDisplay(this.config).configureDisplay(this.hass);
+      case 'cmpelet':
+      case 'cm_pelet':
+        return new CmPeletDisplay(this.config).configureDisplay(this.hass);
     }
 
     return "Boiler type not suppored: " + this.config["device_type"] + ".";

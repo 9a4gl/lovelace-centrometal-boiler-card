@@ -2,70 +2,13 @@ import {
     html,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-export class Display {
+export class DisplayArea {
 
-    constructor(config) {
-        this.config = config
+    constructor() {
         this.orig_width = 1024;
         this.orig_height = 580;
         this.factor = 468 / this.orig_width;
-        this.card_id = "id_" + Math.random().toString(16).slice(2)
-        this.parameters = {}
-        this.values = {}
     }
-
-    // Parameters related helpers
-
-    configureParameter(hass, starts_with, name, opt = "") {
-        if (name in this.config) {
-            this.parameters[name] = this.config[name];
-            return this.config[name];
-        }
-
-        for (const property in hass.states) {
-            if (property.startsWith(starts_with) && property.endsWith(name)) {
-                this.parameters[name] = property;
-                return property;
-            }
-        }
-
-        if (opt == "optional") {
-            return false;
-        }
-
-        throw "Parameter \"" + name + "\" nor detected nor configured.";
-    }
-
-    updateParameterValues(hass) {
-        this.values = {}
-        for (const [key, value] of Object.entries(this.parameters)) {
-            this.values[key] = hass.states[value].state
-        }
-    }
-
-    hasParameterChanged(oldHass, hass, name, entity) {
-        const oldValue = oldHass.states[entity];
-        const newValue = hass.states[entity];
-        if (oldValue != newValue) {
-            var currentdate = new Date();
-            const zeroPad = (num, places) => String(num).padStart(places, '0')
-            var datetime = zeroPad(currentdate.getHours(), 2) + ":"  + zeroPad(currentdate.getMinutes(), 2) + ":" + zeroPad(currentdate.getSeconds(), 2);
-            console.log(datetime + " %s : %s -> %s", name, oldValue.state, newValue.state);
-            return true;
-        }
-        return false;
-    }
-
-    shouldUpdate(oldHass, hass) {
-        for (const [name, entity] of Object.entries(this.parameters)) {
-          if (this.hasParameterChanged(oldHass, hass, name, entity)) {
-            return true;
-          }
-        }
-        return false;
-    }
-
-    // UI related helpers
 
     computeX(left, orig_width) {
         return (100.0 * left / orig_width).toString() + "%;";
@@ -113,16 +56,15 @@ export class Display {
         return str;
     }
 
-    createImage(image, left, top, width, height, orig_width = this.orig_width, orig_height = this.orig_height)
+    createImage(image, left, top, width, height, orig_width = this.orig_width, orig_height = this.orig_height, zindex = 1)
     {
-        var style = this.createStyle("z-index: 1;", left, top, width, height, orig_width, orig_height);
+        var style = this.createStyle("z-index: " + zindex + ";", left, top, width, height, orig_width, orig_height);
         image = "/local/lovelace-centrometal-boiler-card/images/" + image;
         return html`<img src="${image}" style="${style}" />`;
     }
 
     createText(text, font_size, style, left, top, width = null, height = null, orig_width = this.orig_width, orig_height = this.orig_height, zindex = 2)
     {
-        // https://github.com/STRML/textFit ?
         style = this.createStyle(style, left, top, width, height, orig_width, orig_height);
         style += "font-size: " + (font_size * this.factor).toString() + "px;";
         style += " font-family: 'Roboto', 'Helvetica'; text-align: center; vertical-align: top; font-weight: bold; z-index:" + zindex + "; margin: auto;";
