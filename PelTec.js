@@ -3,6 +3,8 @@ import {
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
 import { Display } from "./Display.js"
+import { DisplayArea } from "./DisplayArea.js"
+import { DisplaySubArea } from "./DisplayArea.js"
 
 export class PelTecDisplay extends Display {
 
@@ -30,6 +32,9 @@ export class PelTecDisplay extends Display {
         } catch (error) {
             return error;
         }
+
+        this.bufferArea = new DisplaySubArea(this, 520, 5, 370, 570)
+
         return this;
     }
 
@@ -38,8 +43,10 @@ export class PelTecDisplay extends Display {
         this.updateParameterValues(hass);
 
         return html`
-            <div class="card-content" style="position: relative; top: 0; left: 0; padding: 0px; width: auto; height: auto; line-height: ${20 * this.factor}px;">
+        <div class="card-content" style="position: relative; top: 0; left: 0; padding: 0px; width: auto; height: auto; line-height: ${20 * this.factor}px;">
+
             <img src="/local/lovelace-centrometal-boiler-card/images/peltec/background.png" style="width: 100%; top: 0; left: 0; position: relative;" />
+
             ${this.createText(this.values["boiler_temperature"] + " °C", 42, "color: #FFFFFF;", 100, 157)}
             ${this.createImage("peltec/senzor_b_1.png", 90, 40, 50, null)}
             ${this.createText(this.values["flue_gas"] + " °C", 26, "color: #FFFFFF;",  155, 44)}
@@ -61,7 +68,7 @@ export class PelTecDisplay extends Display {
             ${this.conditionalHtml(this.values["boiler_pump_demand"] == 1, this.createImage("peltec/demand_p.png", 345, 240, 12, null))}
 
             <!-- Fire -->
-            ${this.conditionalHtml(this.values["fire_sensor"] > 1000, this.createText(">1M", 20, "color: #000000;", 120, 360))} <!-- cc.params['B_FotV'].v >= 0 -->
+            ${this.conditionalHtml(this.values["fire_sensor"] > 1000, this.createText(">1M", 20, "color: #000000;", 120, 360))}
             ${this.conditionalHtml(this.values["fire_sensor"] < 1000,
                 html`${this.createText(this.values["fire_sensor"] + "k", 20, "color: #000000;", 120, 360)}
                      ${this.createImage("peltec/vatra.gif", 160, 305, 80, null)}`)}
@@ -107,11 +114,10 @@ export class PelTecDisplay extends Display {
             <!-- Buffer -->
             ${this.conditionalHtml(
                 "buffer_tank_temparature_up" in this.values && "buffer_tank_temparature_down" in this.values,
-                html`<div style="${this.createStyle("z-index: 2;", 520, 5, 370, 570)}">
-                     ${this.createText(this.values["buffer_tank_temparature_up"] + " °C", 32, "color: #0000ff;", this.computeX(100, 370), this.computeY(290, 570), null, null)}
-                     ${this.createText(this.values["buffer_tank_temparature_down"] + " °C", 32, "color: #0000ff;", this.computeX(100, 370), this.computeY(485, 570), null, null)}
-                     ${this.createImage("peltec/akunormalno.png", this.computeX(60, 370), this.computeY(232, 570), this.computeX(165, 370), "auto")}
-                     </div>`)}
+                html`${this.bufferArea.createSubArea(2, "",
+                    html`${this.bufferArea.createText(this.values["buffer_tank_temparature_up"] + " °C", 32, "color: #0000ff;", 100, 290, null, null)}
+                         ${this.bufferArea.createText(this.values["buffer_tank_temparature_down"] + " °C", 32, "color: #0000ff;", 100, 485, null, null)}
+                         ${this.bufferArea.createImage("peltec/akunormalno.png", 60, 232, 165, "auto")}`)}`)}
 
             <!-- Boiler power button -->
             <button
@@ -127,7 +133,7 @@ export class PelTecDisplay extends Display {
                     <button type="button" @click="${this.hidePopup}" style="display: inline; margin: auto; width:auto; padding: 10px;">CANCEL</button>
                 </div>
             </div>
-            </div>`;
+        </div>`;
     }
 
     toggleBoilerOnOff() {
