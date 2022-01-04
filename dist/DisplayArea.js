@@ -57,7 +57,7 @@ export class DisplayArea {
     createImage(image, left, top, width, height, zindex = 1)
     {
         var style = this.createStyle("z-index: " + zindex + ";", left, top, width, height);
-        image = "/local/lovelace-centrometal-boiler-card/images/" + image;
+        image = "/local/community/lovelace-centrometal-boiler-card/images/" + image;
         return html`<img src="${image}" style="${style}" />`;
     }
 
