@@ -10,6 +10,7 @@ export class DisplayArea {
         this.area_width = width;
         this.area_height = height;
         this.factor = 468 / 1024; // Used for font scaling
+        this.images_folder = "/local/community/lovelace-centrometal-boiler-card/images/"
     }
 
     asPercentage(pos, full) {
@@ -57,7 +58,7 @@ export class DisplayArea {
     createImage(image, left, top, width, height, zindex = 1)
     {
         var style = this.createStyle("z-index: " + zindex + ";", left, top, width, height);
-        image = "/local/community/lovelace-centrometal-boiler-card/images/" + image;
+        image = this.images_folder + image;
         return html`<img src="${image}" style="${style}" />`;
     }
 

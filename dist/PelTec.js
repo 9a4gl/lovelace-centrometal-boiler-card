@@ -47,13 +47,10 @@ export class PelTecDisplay extends Display {
     {
         this.updateParameterValues(hass);
 
-        this.values["b_addconf"] = 1;
-        this.values["b_kornum"] = 5;
-
         return html`
         <div class="card-content" style="position: relative; top: 0; left: 0; padding: 0px; width: auto; height: auto; line-height: ${20 * this.factor}px;">
 
-            <img src="/local/community/lovelace-centrometal-boiler-card/images/peltec/background.png" style="width: 100%; top: 0; left: 0; position: relative;" />
+            <img src="${this.images_folder}/peltec/background.png" style="width: 100%; top: 0; left: 0; position: relative;" />
 
             <!-- Fire -->
             ${this.conditional(
@@ -151,7 +148,7 @@ export class PelTecDisplay extends Display {
             ${this.conditional(
                 this.values["boiler_state"] === "OFF",
                 this.createText("", 32,
-                "display:block; background-repeat: no-repeat; background-image: url('/local/lovelace-centrometal-boiler-card/images/peltec/start_stop.png'); background-position: 0px 0px;",
+                "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "peltec/start_stop.png'); background-position: 0px 0px;",
                 945, 390, 36, 36))}
             ${this.conditional(
                 this.values["command_active"] == 0 && this.values["boiler_state"] !== "OFF",
@@ -171,7 +168,7 @@ export class PelTecDisplay extends Display {
                 @click="${this.toggleBoilerOnOff}"></button>
 
             <!-- Turn On / Turn Off / Cancel popup -->
-            <div id="${this.card_id}_popup" style="${this.createStyle("display: none; z-index: 100; background-color: rgba(222, 222, 222, 0.75);", 20, 20, this.orig_width - 40, this.orig_height - 40)}">
+            <div id="${this.card_id}_popup" style="${this.createStyle("display: none; z-index: 100; background-color: rgba(222, 222, 222, 0.75);", 2, 2, this.area_width - 4, this.area_height - 4)}">
                 <div style="position: absolute; margin: 0; top: 50%; left: 50%; text-align: center; transform: translate(-50%, -50%); width: 100%;">
                     <button id="${this.card_id}_on_button" type="button" @click="${this.handleTurnOn}" style="display: inline; margin: auto; width:auto; padding: 10px;">TURN ON</button>
                     <button id="${this.card_id}_off_button" type="button" @click="${this.handleTurnOff}" style="display: none; margin: auto; width:auto; padding: 10px;">TURN OFF</button>

@@ -48,7 +48,9 @@ export class Display extends DisplayArea {
             var currentdate = new Date();
             const zeroPad = (num, places) => String(num).padStart(places, '0')
             var datetime = zeroPad(currentdate.getHours(), 2) + ":"  + zeroPad(currentdate.getMinutes(), 2) + ":" + zeroPad(currentdate.getSeconds(), 2);
-            console.log(datetime + " %s : %s -> %s", name, oldValue.state, newValue.state);
+            console.log(datetime + " %s : %s -> %s", name,
+                (typeof (oldValue) != "undefined") ? oldValue.state : "<undefined>",
+                (typeof(newValue) != "undefined") ? newValue.state : "<undefined>");
             return true;
         }
         return false;
