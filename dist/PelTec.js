@@ -27,9 +27,9 @@ export class PelTecDisplay extends Display {
             this.configureParameter(hass, "sensor.peltec", "tank_level", "optional")
             this.configureParameter(hass, "sensor.peltec", "buffer_tank_temparature_up", "optional")
             this.configureParameter(hass, "sensor.peltec", "buffer_tank_temparature_down", "optional")
-            this.configureParameter(hass, "sensor.peltec", "b_zlj", "optional") // TIHOTODO
-            this.configureParameter(hass, "sensor.peltec", "b_addconf", "optional") // TIHOTODO
-            this.configureParameter(hass, "sensor.peltec", "b_kornum", "optional") // TIHOTODO
+            this.configureParameter(hass, "sensor.peltec", "accessories", "optional")
+            this.configureParameter(hass, "sensor.peltec", "accessories_value", "optional")
+            this.configureParameter(hass, "sensor.peltec", "operation_mode", "optional")
             // Service
             this.configureParameter(hass, "switch.peltec", "boiler_switch")
         } catch (error) {

@@ -1,7 +1,3 @@
-import {
-    html,
-} from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
-
 import { DisplayArea } from "./DisplayArea.js"
 
 export class Display extends DisplayArea {
