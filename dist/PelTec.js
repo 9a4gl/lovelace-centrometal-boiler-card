@@ -47,11 +47,7 @@ export class PelTecDisplay extends Display {
     {
         this.updateParameterValues(hass);
 
-        return html`
-        <div class="card-content" style="position: relative; top: 0; left: 0; padding: 0px; width: auto; height: auto; line-height: ${20 * this.factor}px;">
-
-            <img src="${this.images_folder}/peltec/background.png" style="width: 100%; top: 0; left: 0; position: relative;" />
-
+        return this.createCard("peltec/background.png", html`
             <!-- Fire -->
             ${this.conditional(
                 this.values["fire_sensor"] >= 1000,
@@ -97,10 +93,10 @@ export class PelTecDisplay extends Display {
                 "lambda_sensor" in this.values && this.values["lambda_sensor"] > 0.1,
                 html`${this.createImage("peltec/senzor_b_1.png", 90, 90, 50, null)}
                      ${this.createText(html`
-                        ${this.values["lambda_sensor"] < 25.4 ? this.values["lambda_sensor"] : "-"}% O<sub>2</sub>`, 20, "color: #e0e3ff;", 155, 90)}`)}
+                        ${this.values["lambda_sensor"] < 25.4 ? this.values["lambda_sensor"] : "-"}% O<sub>2</sub>`, 20, "color: #e0e3ff;", 155, 90 + 2)}`)}
 
             <!-- Mixer temperature -->
-            ${this.createText(this.values["mixer_temperature"] + " °C", 26, "color: #FFFFFF;", 460, 262, 80)}
+            ${this.createText(this.values["mixer_temperature"] + " °C", 26, "color: #FFFFFF;", 460, 262, 80 + 20)}
 
             <!-- Mixing valve opening -->
             ${this.createText(this.values["mixing_valve"] + "%", 22, "color: #ffffff;", 340, 139, 80)}
@@ -130,8 +126,8 @@ export class PelTecDisplay extends Display {
                 this.values["configuration"] === "4. BUF" &&
                 "buffer_tank_temparature_up" in this.values && "buffer_tank_temparature_down" in this.values,
                 html`${this.bufferArea.createSubArea(2, "",
-                    html`${this.bufferArea.createText(this.values["buffer_tank_temparature_up"] + " °C", 32, "color: #0000ff;", 100, 290, null, null)}
-                            ${this.bufferArea.createText(this.values["buffer_tank_temparature_down"] + " °C", 32, "color: #0000ff;", 100, 485, null, null)}
+                    html`${this.bufferArea.createText(this.values["buffer_tank_temparature_up"] + " °C", 32, "color: #0000ff;", 100-30, 290, 145, null)}
+                            ${this.bufferArea.createText(this.values["buffer_tank_temparature_down"] + " °C", 32, "color: #0000ff;", 100-30, 485, 145, null)}
                             ${this.bufferArea.createImage("peltec/akunormalno.png", 60, 232, 165, "auto")}`)}`)}
 
             <!-- Button -->
@@ -144,12 +140,12 @@ export class PelTecDisplay extends Display {
             ${this.conditional(
                 this.values["command_active"] == 1 && this.values["boiler_state"] !== "OFF" && this.values["boiler_state"] !== "S7-3",
                 this.createImage("peltec/playradi.gif", 942, 390, 40, null))}
-            ${this.createText(this.values["boiler_state"], 32, "color: #ffffff; text-align: center; z-index: 3;", 900, 360, 120)}
+            ${this.createText(this.values["boiler_state"], 32, "color: #ffffff;", 900, 360, 120, null, 3)}
             ${this.conditional(
                 this.values["boiler_state"] === "OFF",
                 this.createText("", 32,
                 "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "peltec/start_stop.png'); background-position: 0px 0px;",
-                945, 390, 36, 36))}
+                945, 390, 36, 36, 2, -1))}
             ${this.conditional(
                 this.values["command_active"] == 0 && this.values["boiler_state"] !== "OFF",
                 this.createImage("peltec/stopradi.gif", 942, 390, 36, "auto"))}
@@ -164,19 +160,18 @@ export class PelTecDisplay extends Display {
 
             <!-- Boiler power button -->
             <button
-                style="${this.createStyle("margin: 0; border: 0px; vertical-align: top; z-index: 5; background-color: rgba(255,255,255,0.0);", 900, 320, 120, 260)}"
+                style="${this.createStyle("margin: 0; border: 0px; vertical-align: top; z-index: 5; background-color: rgba(255,255,255,0.0);", 890, 410, 130, 170)}"
                 @click="${this.toggleBoilerOnOff}"></button>
 
             <!-- Turn On / Turn Off / Cancel popup -->
-            <div id="${this.card_id}_popup" style="${this.createStyle("display: none; z-index: 100; background-color: rgba(222, 222, 222, 0.75);", 2, 2, this.area_width - 4, this.area_height - 4)}">
+            <div id="${this.card_id}_popup" style="${this.createStyle("display: none; z-index: 100; background-color: rgba(222, 222, 222, 0.75); border-radius: var(--ha-card-border-radius, 4px);", 5, 5, this.area_width - 10, this.area_height - 10)}">
                 <div style="position: absolute; margin: 0; top: 50%; left: 50%; text-align: center; transform: translate(-50%, -50%); width: 100%;">
                     <button id="${this.card_id}_on_button" type="button" @click="${this.handleTurnOn}" style="display: inline; margin: auto; width:auto; padding: 10px;">TURN ON</button>
                     <button id="${this.card_id}_off_button" type="button" @click="${this.handleTurnOff}" style="display: none; margin: auto; width:auto; padding: 10px;">TURN OFF</button>
                     <p style="display: inline-block; width: 50px;"></p>
                     <button type="button" @click="${this.hidePopup}" style="display: inline; margin: auto; width:auto; padding: 10px;">CANCEL</button>
                 </div>
-            </div>
-        </div>`;
+            </div>`);
     }
 
     toggleBoilerOnOff() {
