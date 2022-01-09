@@ -5,9 +5,9 @@ export class Display extends DisplayArea {
     constructor(config) {
         super()
         this.config = config
-        this.card_id = "id_" + Math.random().toString(16).slice(2)
         this.parameters = {}
         this.values = {}
+        this.card_id = "id_" + Math.random().toString(16).slice(2)
     }
 
     configureParameter(hass, starts_with, name, opt = "") {

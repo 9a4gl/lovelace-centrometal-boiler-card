@@ -2,9 +2,9 @@ import {
     html,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import { Display } from "./Display.js"
+import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js"
 
-export class CmPeletDisplay extends Display {
+export class CmPeletDisplay extends DisplayWithPowerButton {
 
     configureDisplay(hass) {
         try {
@@ -41,16 +41,15 @@ export class CmPeletDisplay extends Display {
     {
         this.updateParameterValues(hass);
 
-        return html`
-            <div class="card-content" style="position: relative; top: 0; left: 0; padding: 0px; width: auto; height: auto; line-height: ${20 * this.factor}px;">
-            <img src="${this.images_folder}cmpelet/peletsetdisplay-clean.png" style="width: 100%; top: 0; left: 0; position: relative; border-radius: var(--ha-card-border-radius, 4px);" />
+        return this.createCard("cmpelet/peletsetdisplay-clean.png", html`
 
+            <!-- boiler image on background -->
             ${this.conditional(
                 this.values["firmware_version"] > 'v1.25' && this.values["b_cp"] == 1,
                 this.createImage("cmpelet/boiler_centroplus.png", -1, 9, 347, null, 0)
-            )}
+        )}
 
-            </div>`;
+        `);
     }
 
 }

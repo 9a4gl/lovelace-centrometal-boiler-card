@@ -82,7 +82,7 @@ class LoveaceCentrometalBoilerCard extends LitElement {
       }
       this.configured = true;
     }
-    return html`<ha-card><p></p>${this.display.createContent(this.hass, this.config)}</ha-card>`;
+    return html`<ha-card><p></p>${this.display.createContent(this.hass)}</ha-card>`;
   }
 
   setConfig(config) {
