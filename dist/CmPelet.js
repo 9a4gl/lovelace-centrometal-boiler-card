@@ -13,7 +13,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter(hass, "sensor.cm_pelet", "firmware_version")
             this.configureParameter(hass, "sensor.cm_pelet", "b_smd")
             this.configureParameter(hass, "sensor.cm_pelet", "b_cp")
-/*
+/* TODO
             this.configureParameter(hass, "sensor.cm_pelet", "fan")
             this.configureParameter(hass, "sensor.cm_pelet", "boiler_pump")
             this.configureParameter(hass, "sensor.cm_pelet", "boiler_pump_demand")
@@ -47,9 +47,22 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             ${this.conditional(
                 this.values["firmware_version"] > 'v1.25' && this.values["b_cp"] == 1,
                 this.createImage("cmpelet/boiler_centroplus.png", -1, 9, 347, null, 0)
-        )}
+            )}
+
+            <!-- TODO -->
+
+            <!-- Boiler power button -->
+            ${this.createPowerButton(function (root) { this.turnCmPeletOn(root); }, function (root) { this.turnCmPeletOff(root); })}
 
         `);
+    }
+
+    turnCmPeletOn(root) {
+        root.hass.callService("switch", "turn_on", {entity_id: root.display.parameters["boiler_switch"]});
+    }
+
+    turnCmPeletOff(root) {
+        root.hass.callService("switch", "turn_off", {entity_id: root.display.parameters["boiler_switch"]});
     }
 
 }
