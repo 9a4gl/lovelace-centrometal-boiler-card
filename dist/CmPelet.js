@@ -13,24 +13,12 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter(hass, "sensor.cm_pelet", "firmware_version")
             this.configureParameter(hass, "sensor.cm_pelet", "b_smd")
             this.configureParameter(hass, "sensor.cm_pelet", "b_cp")
-/* TODO
-            this.configureParameter(hass, "sensor.cm_pelet", "fan")
-            this.configureParameter(hass, "sensor.cm_pelet", "boiler_pump")
-            this.configureParameter(hass, "sensor.cm_pelet", "boiler_pump_demand")
-            this.configureParameter(hass, "sensor.cm_pelet", "electric_heater")
-            this.configureParameter(hass, "sensor.cm_pelet", "boiler_temperature")
-            this.configureParameter(hass, "sensor.cm_pelet", "flue_gas")
-            this.configureParameter(hass, "sensor.cm_pelet", "mixer_temperature")
-            this.configureParameter(hass, "sensor.cm_pelet", "mixing_valve")
-            // optional
-            this.configureParameter(hass, "sensor.cm_pelet", "lambda_sensor", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "outdoor_temperature", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "tank_level", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "buffer_tank_temparature_up", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "buffer_tank_temparature_down", "optional")
+
+            /* TODO */
+
             // Service
             this.configureParameter(hass, "switch.cm_pelet", "boiler_switch")
-*/
+
         } catch (error) {
             return error;
         }
