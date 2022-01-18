@@ -15,6 +15,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter(hass, "sensor.cm_pelet", "b_cp")
 
             /* TODO */
+            this.configureParameter(hass, "sensor.cm_pelet", "outdoor_temperature", "optional")
 
             // Service
             this.configureParameter(hass, "switch.cm_pelet", "boiler_switch")
@@ -41,6 +42,12 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
 
             <!-- Boiler power button -->
             ${this.createPowerButton(function (root) { this.turnCmPeletOn(root); }, function (root) { this.turnCmPeletOff(root); })}
+
+            <!-- Outdoor temperature -->
+            ${this.createImage("cmpelet/vanjska.png", 600, 20, 20, "auto")}
+            ${this.createText(
+                (('outdoor_temperature' in this.values && this.values["outdoor_temperature"] > -45 && this.values["outdoor_temperature"] < 145) ? this.values["outdoor_temperature"] : "--")
+                    + " °C", 28, "color: #ffffff;", 530, 30)}
 
         `);
     }

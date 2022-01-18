@@ -34,6 +34,9 @@ export class Display extends DisplayArea {
         this.values = {}
         for (const [key, value] of Object.entries(this.parameters)) {
             this.values[key] = hass.states[value].state
+            if (this.values[key] == "unavailable") {
+                this.values[key] = "-"
+            }
         }
     }
 

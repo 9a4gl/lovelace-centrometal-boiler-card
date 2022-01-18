@@ -47,6 +47,11 @@ export class PelTecDisplay extends DisplayWithPowerButton {
     {
         this.updateParameterValues(hass);
 
+        if (this.values["boiler_state"] == "-") {
+            return this.createCard("peltec/background.png",
+                html`${this.createText("Boiler unavailable", 36, "color: #ffffff;", 360, 50)}`)
+        }
+
         return this.createCard("peltec/background.png", html`
             <!-- Fire -->
             ${this.conditional(
@@ -130,6 +135,14 @@ export class PelTecDisplay extends DisplayWithPowerButton {
                             ${this.bufferArea.createText(this.values["buffer_tank_temparature_down"] + " °C", 32, "color: #0000ff;", 100-30, 485, 145, null)}
                             ${this.bufferArea.createImage("peltec/akunormalno.png", 60, 232, 165, "auto")}`)}`)}
 
+            <!-- CSK indicator -->
+            ${this.conditional(
+                "b_addconf" in this.values && "b_kornum" in this.values && this.values["b_kornum"] != 255,
+                html`${this.cskTouchArea.createSubArea(2, "",
+                    html`${this.cskTouchArea.createImage("peltec/csk_touch_indicator.png", 15, 0, 65, "auto", 2)}
+                         ${this.cskTouchArea.createText(this.values["b_kornum"], 24, "color: #ffffff; text-align: right;", 42, 13, null, null, 3)}
+                    `)}`)}
+
             <!-- Button -->
             ${this.conditional(
                 this.values["boiler_state"] !== "OFF",
@@ -149,14 +162,6 @@ export class PelTecDisplay extends DisplayWithPowerButton {
             ${this.conditional(
                 this.values["command_active"] == 0 && this.values["boiler_state"] !== "OFF",
                 this.createImage("peltec/stopradi.gif", 942, 390, 36, "auto"))}
-
-            <!-- CSK indicator -->
-            ${this.conditional(
-                "b_addconf" in this.values && "b_kornum" in this.values && this.values["b_kornum"] != 255,
-                html`${this.cskTouchArea.createSubArea(2, "",
-                    html`${this.cskTouchArea.createImage("peltec/csk_touch_indicator.png", 15, 0, 65, "auto", 2)}
-                         ${this.cskTouchArea.createText(this.values["b_kornum"], 24, "color: #ffffff; text-align: right;", 42, 13, null, null, 3)}
-                    `)}`)}
 
             <!-- Boiler power button -->
             ${this.createPowerButton(function (root) { this.turnPelTecOn(root); }, function (root) { this.turnPelTecOff(root); })}
