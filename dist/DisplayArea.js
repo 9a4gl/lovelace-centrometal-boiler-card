@@ -4,7 +4,7 @@ import {
 
 export class DisplayArea {
 
-    constructor(posx = 0, posy = 0, width = 1024, height = 580) {
+    constructor(posx, posy, width, height) {
         this.area_posx = posx
         this.area_posy = posy
         this.area_width = width;

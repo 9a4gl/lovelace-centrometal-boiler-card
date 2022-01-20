@@ -2,8 +2,8 @@ import { DisplayArea } from "./DisplayArea.js"
 
 export class Display extends DisplayArea {
 
-    constructor(config) {
-        super()
+    constructor(config, posx, posy, width, height) {
+        super(posx, posy, width, height)
         this.config = config
         this.parameters = {}
         this.values = {}

@@ -7,6 +7,10 @@ import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js"
 
 export class PelTecDisplay extends DisplayWithPowerButton {
 
+    constructor(config) {
+        super(config, 0, 0, 1024, 580)
+    }
+
     configureDisplay(hass) {
         try {
             this.configureParameter(hass, "sensor.peltec", "boiler_state")
