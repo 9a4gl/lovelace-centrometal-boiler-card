@@ -132,8 +132,8 @@ export class PelTecDisplay extends DisplayWithPowerButton {
                 "buffer_tank_temparature_up" in this.values && "buffer_tank_temparature_down" in this.values,
                 html`${this.bufferArea.createSubArea(2, "",
                     html`${this.bufferArea.createText(this.values["buffer_tank_temparature_up"] + " °C", 32, "color: #0000ff;", 100-30, 290, 145, null)}
-                            ${this.bufferArea.createText(this.values["buffer_tank_temparature_down"] + " °C", 32, "color: #0000ff;", 100-30, 485, 145, null)}
-                            ${this.bufferArea.createImage("peltec/akunormalno.png", 60, 232, 165, "auto")}`)}`)}
+                         ${this.bufferArea.createText(this.values["buffer_tank_temparature_down"] + " °C", 32, "color: #0000ff;", 100-30, 485, 145, null)}
+                         ${this.bufferArea.createImage("peltec/akunormalno.png", 60, 232, 165, "auto")}`)}`)}
 
             <!-- CSK indicator -->
             ${this.conditional(
