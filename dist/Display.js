@@ -63,4 +63,7 @@ export class Display extends DisplayArea {
         }
         return false;
     }
+    formatTemperature(parameter, default_value = "--") {
+        return ((parameter in this.values) && (this.values[parameter] > -45) && (this.values[parameter] < 145)) ? this.values[parameter] : default_value
+    }
 }

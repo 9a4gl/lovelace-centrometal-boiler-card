@@ -21,9 +21,20 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter(hass, "sensor.cm_pelet", "boiler_temperature")
             this.configureParameter(hass, "sensor.cm_pelet", "fire_sensor")
             this.configureParameter(hass, "sensor.cm_pelet", "heater_fan_state")
+            this.configureParameter(hass, "sensor.cm_pelet", "setup")
 
             // Optional
             this.configureParameter(hass, "sensor.cm_pelet", "outdoor_temperature", "optional")
+            this.configureParameter(hass, "sensor.cm_pelet", "buffer_tank_up", "optional")
+            this.configureParameter(hass, "sensor.cm_pelet", "buffer_tank_down", "optional")
+            this.configureParameter(hass, "sensor.cm_pelet", "circuit_1_flow_temperature", "optional")
+            this.configureParameter(hass, "sensor.cm_pelet", "circuit_1_pump", "optional")
+            this.configureParameter(hass, "sensor.cm_pelet", "circuit_2_flow_temperature", "optional")
+            this.configureParameter(hass, "sensor.cm_pelet", "circuit_2_pump", "optional")
+            this.configureParameter(hass, "sensor.cm_pelet", "boiler_pump", "optional")
+            this.configureParameter(hass, "sensor.cm_pelet", "b_zlj", "optional")
+            this.configureParameter(hass, "sensor.cm_pelet", "boiler_operational", "optional")
+            this.configureParameter(hass, "sensor.cm_pelet", "additional_features", "optional")
 
             // Service
             this.configureParameter(hass, "switch.cm_pelet", "boiler_switch")
@@ -35,6 +46,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
         // define Sub areas of display
         this.fireArea = new DisplaySubArea(this, 130, 350, 190, 90)
         this.fanArea = new DisplaySubArea(this, 220, 390, 140, 130)
+        this.a02area = new DisplaySubArea(this, 387, 10, 500, 550)
 
         return this;
     }
@@ -60,15 +72,15 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             ${this.createImage("cmpelet/vanjska.png", 890, 125, 20, "auto", 3)}
             ${this.createText(
                 (('outdoor_temperature' in this.values && this.values["outdoor_temperature"] > -45 && this.values["outdoor_temperature"] < 145) ? this.values["outdoor_temperature"] : "--")
-                    + "°C", 28, "color: #ffffff; text-align: right; ", 820, 140)}
+                    + " °C", 28, "color: #ffffff; text-align: right; ", 820, 140)}
 
             <!-- Boiler temperature -->
-            ${this.createText(this.values["boiler_temperature"] + "°C", 42, "color: #FFFFFF;", 47, 33, null, null, 4)}
+            ${this.createText(this.values["boiler_temperature"] + " °C", 42, "color: #FFFFFF;", 47, 33, null, null, 4)}
 
             <!-- Boiler power states -->
             ${this.conditional(
                 (this.values['b_smd'] == 0 || this.values["firmware_version"] < 'v1.25'),
-                this.createText(this.values["boiler_state"], 32, "color: #ffffff; text-align: center", 900, 360, 120, null, 3))}
+                this.createText(this.values["boiler_state"], 32, "color: #ffffff; text-align: center;", 900, 360, 120, null, 3))}
             ${this.conditional(
                 (this.values['b_smd'] == 0 || this.values["firmware_version"] < 'v1.25') && this.values["boiler_state"] === "OFF",
                 this.createText("", 32,
@@ -114,6 +126,64 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
                             this.fanArea.createImage("cmpelet/ventilator-pelet.gif", 22, 48, 44, null))}
                         ${this.fanArea.createText(this.values["heater_fan_state"], 25, "color: #ffffff; text-align: center;", 20, 13, null, null, 3, -1)}
             `)}`)}
+
+            <!-- A.0.2 configuration -->
+            ${this.conditional(
+                this.values["setup"] == "A.0.2",
+                this.a02area.createSubArea(2, "", html`
+                    ${this.a02area.createImage("cmpelet/akumulacijskiSpr.png", 160, 215, 140, "auto", 2)}
+                    ${this.conditional(
+                        "buffer_tank_up" in this.values,
+                        this.a02area.createText(this.values["buffer_tank_up"] + " °C", 32, "color: #0000ff;", 190, 275, null, null, 3)
+                    )}
+                    ${this.conditional(
+                        "buffer_tank_down" in this.values,
+                        this.a02area.createText(this.values["buffer_tank_down"] + " °C", 32, "color: #0000ff;", 190, 478, null, null, 3)
+                    )}
+                    ${this.a02area.createImage("cmpelet/a00_cjevovod.png", 0, 280, 160, "auto", 2)}
+                    ${this.a02area.createImage("cmpelet/pumpaStojiLijevo.png", 15, 457, 64, null, 3)}
+                    ${this.conditional(
+                        "boiler_pump" in this.values && this.values["boiler_pump"] == 1,
+                        this.a02area.createImage("cmpelet/pumpaokrece.gif", 15, 457, 64, null, 4)
+                    )}
+                    ${this.a02area.createImage("cmpelet/krug_grijanja.png", 100, -10, 80, "auto", 3)}
+                    ${this.a02area.createImage("cmpelet/senzor_vodoravni_2.png", 80, 60, 45, null, 3)}
+                    ${this.a02area.createText("M", 28, "color: #ffffff; text-align: center;", 140, 65)}
+                    ${this.a02area.createText(this.formatTemperature("circuit_1_flow_temperature", "-.-") + " °C", 20, "color: #ffffff; text-align: right;", 40, 87, null, null, 3)}
+                    ${this.conditional(
+                        "circuit_1_pump" in this.values && this.values["circuit_1_pump"] == 1,
+                        this.a02area.createImage("cmpelet/pumpaokrece.gif", 100, 11, 53, null, 4)
+                    )}
+                    ${this.a02area.createImage("cmpelet/krug_grijanja.png", 270, -10, 80, "auto", 3)}
+                    ${this.a02area.createImage("cmpelet/senzor_vodoravni_2.png", 250, 60, 45, null, 3)}
+                    ${this.a02area.createText("M", 28, "color: #ffffff; text-align: center;", 310, 65)}
+                    ${this.a02area.createText(this.formatTemperature("circuit_2_flow_temperature", "-.-") + " °C", 20, "color: #ffffff; text-align: right;", 210, 87, null, null, 3)}
+                    ${this.conditional(
+                        "circuit_2_pump" in this.values && this.values["circuit_2_pump"] == 1,
+                        this.a02area.createImage("cmpelet/pumpaokrece.gif", 270, 11, 53, null, 4)
+                    )}
+                `))}
+
+            <!-- Net monitor -->
+            ${this.createImage("unit/netMon.png", 935, 260, 50, null, 2)}
+
+            <!-- Boiler Operational -->
+            ${this.conditional(
+                "boiler_operational" in this.values && this.values["boiler_operational"] != 0,
+                this.createImage("unit/uklMon.png", 935, 200, 50, null, 2)
+            )}
+
+            <!-- Remote control -->
+            ${this.conditional(
+                "additional_features" in this.values && (this.values["additional_features"] & 64) > 0,
+                this.createImage("unit/vanjMon.png", 935, 75, 50, null, 2)
+            )}
+
+            <!-- Tap/radiator mode -->
+            ${this.conditional(
+                "b_zlj" in this.values && (this.values["b_zlj"] == 0 || this.values["b_zlj"] == 2),
+                this.createImage("cmpelet/radijatorSlavina.png", 800, 10, 80, "auto", 2)
+            )}
 
             <!-- Boiler power button -->
             ${this.createPowerButton(function (root) { this.turnCmPeletOn(root); }, function (root) { this.turnCmPeletOff(root); })}

@@ -25,6 +25,7 @@ export class PelTecDisplay extends DisplayWithPowerButton {
             this.configureParameter(hass, "sensor.peltec", "mixer_temperature")
             this.configureParameter(hass, "sensor.peltec", "mixing_valve")
             this.configureParameter(hass, "sensor.peltec", "configuration")
+
             // optional
             this.configureParameter(hass, "sensor.peltec", "lambda_sensor", "optional")
             this.configureParameter(hass, "sensor.peltec", "outdoor_temperature", "optional")
@@ -34,8 +35,11 @@ export class PelTecDisplay extends DisplayWithPowerButton {
             this.configureParameter(hass, "sensor.peltec", "accessories", "optional")
             this.configureParameter(hass, "sensor.peltec", "accessories_value", "optional")
             this.configureParameter(hass, "sensor.peltec", "operation_mode", "optional")
+            this.configureParameter(hass, "sensor.peltec", "B_zlj", "optional")
+
             // Service
             this.configureParameter(hass, "switch.peltec", "boiler_switch")
+
         } catch (error) {
             return error;
         }
@@ -112,9 +116,7 @@ export class PelTecDisplay extends DisplayWithPowerButton {
 
             <!-- Outdoor temperature -->
             ${this.createImage("cmpelet/vanjska.png", 600, 20, 20, "auto")}
-            ${this.createText(
-                (('outdoor_temperature' in this.values && this.values["outdoor_temperature"] > -45 && this.values["outdoor_temperature"] < 145) ? this.values["outdoor_temperature"] : "--")
-                    + "°C", 28, "color: #ffffff;", 530, 30)}
+            ${this.createText(this.formatTemperature("outdoor_temperature") + "°C", 28, "color: #ffffff;", 530, 30)}
 
             <!-- Pellet tank level -->
             ${this.conditional(
