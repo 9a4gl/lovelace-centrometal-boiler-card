@@ -45,6 +45,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
 
         // define Sub areas of display
         this.fireArea = new DisplaySubArea(this, 130, 350, 190, 90)
+        this.flameArea = new DisplaySubArea(this, 90, 392, 100, 70)
         this.fanArea = new DisplaySubArea(this, 220, 390, 140, 130)
         this.a02area = new DisplaySubArea(this, 387, 10, 500, 550)
 
@@ -111,7 +112,17 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
                         ${this.conditional(
                             this.values["fire_sensor"] < 1000,
                             this.fireArea.createText(this.values["fire_sensor"] + "k", 20, "color: #ffffff;", 25, 15, null, null, 3, -1))}
-            `)}`)}
+                `)}`)}
+
+            <!-- flame image -->
+            ${this.conditional(
+                (this.values["firmware_version"] > 'v1.25' && this.values['b_smd'] == 0),
+                html`${this.flameArea.createSubArea(2, "",
+                    this.conditional(
+                        this.values["fire_sensor"] < 1000,
+                        this.flameArea.createImage("cmpelet/vatra2.gif", 60, 22, 100, "auto", 2))
+                    )}
+                `)}
 
             <!-- Fan -->
             ${this.conditional(
