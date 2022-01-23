@@ -5,8 +5,9 @@ import {
 
 import { PelTecDisplay } from "./PelTec.js"
 import { CmPeletDisplay } from "./CmPelet.js"
+import { BioTecDisplay } from "./BioTec.js"
 
-class LoveaceCentrometalBoilerCard extends LitElement {
+class LovelaceCentrometalBoilerCard extends LitElement {
 
   constructor() {
     super();
@@ -66,6 +67,8 @@ class LoveaceCentrometalBoilerCard extends LitElement {
       case 'cmpelet':
       case 'cm_pelet':
         return new CmPeletDisplay(this.config).configureDisplay(this.hass);
+      case 'biotec':
+        return new BioTecDisplay(this.config).configureDisplay(this.hass);
     }
 
     return "Boiler type not suppored: " + this.config["device_type"] + ".";
@@ -96,4 +99,4 @@ class LoveaceCentrometalBoilerCard extends LitElement {
 
 }
 
-customElements.define('centrometal-boiler-card', LoveaceCentrometalBoilerCard);
+customElements.define('centrometal-boiler-card', LovelaceCentrometalBoilerCard);
