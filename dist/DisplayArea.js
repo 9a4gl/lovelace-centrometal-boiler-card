@@ -21,6 +21,14 @@ export class DisplayArea {
         return (100.0 * pos / full).toString() + "%;";
     }
 
+    hexBitIsSet(firstNumber, secondNumber) {
+        return ((parseInt(firstNumber, 16) >> secondNumber) % 2 != 0)
+    }
+
+    hexBitIsClear(firstNumber, secondNumber){
+        return ((parseInt(firstNumber, 16) >> secondNumber) % 2 == 0)
+    }
+
     createStyle(styleEnd, left, top, width, height, padding = -1) {
         var str = "position: absolute;";
         if (left != null) {

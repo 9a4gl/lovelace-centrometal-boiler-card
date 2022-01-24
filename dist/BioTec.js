@@ -166,12 +166,4 @@ export class BioTecDisplay extends Display {
                     `))}
         `);
     }
-
-    hexBitIsSet(firstNumber, secondNumber) {
-        return ((parseInt(firstNumber, 16) >> secondNumber) % 2 != 0)
-    }
-
-    hexBitIsClear(firstNumber, secondNumber){
-        return ((parseInt(firstNumber, 16) >> secondNumber) % 2 == 0)
-    }
 }
