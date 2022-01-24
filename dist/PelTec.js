@@ -143,10 +143,10 @@ export class PelTecDisplay extends DisplayWithPowerButton {
 
             <!-- CSK indicator -->
             ${this.conditional(
-                "b_addconf" in this.values && "b_kornum" in this.values && this.values["b_kornum"] != 255,
+                "accessories" in this.values && "accessories_value" in this.values && this.values["accessories_value"] != 255,
                 html`${this.cskTouchArea.createSubArea(2, "",
                     html`${this.cskTouchArea.createImage("peltec/csk_touch_indicator.png", 15, 0, 65, "auto", 2)}
-                         ${this.cskTouchArea.createText(this.values["b_kornum"], 24, "color: #ffffff; text-align: right;", 42, 13, null, null, 3)}
+                         ${this.cskTouchArea.createText(this.values["accessories_value"], 24, "color: #ffffff; text-align: right;", 42, 13, null, null, 3)}
                     `)}`)}
 
             <!-- Button -->
