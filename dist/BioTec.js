@@ -22,11 +22,9 @@ export class BioTecDisplay extends Display {
             this.configureParameter(hass, "sensor.biotec", "glow")
             this.configureParameter(hass, "sensor.biotec", "flue_gas")
             this.configureParameter(hass, "sensor.biotec", "configuration")
-
-            this.configureParameter(hass, "sensor.biotec", "command_active")
             this.configureParameter(hass, "sensor.biotec", "boiler_pump")
             this.configureParameter(hass, "sensor.biotec", "boiler_pump_demand")
-            this.configureParameter(hass, "sensor.biotec", "mixer_temperature")
+            this.configureParameter(hass, "sensor.biotec", "command_active")
 
             // optional
             this.configureParameter(hass, "sensor.biotec", "lambda_sensor", "optional")
@@ -48,6 +46,11 @@ export class BioTecDisplay extends Display {
         // define Sub areas of display
         this.cskTouchArea = new DisplaySubArea(this, 225, 85, 100, 50)
         this.conf_bit_01 = new DisplaySubArea(this, 490, 40, 450, 190)
+        this.conf_bit_7 = new DisplaySubArea(this, 631, 380, 260, 170)
+        this.conf_bit_59 = new DisplaySubArea(this, 470, 20, 300, 160)
+        this.conf_bit_9 = new DisplaySubArea(this, 620, 380, 290, 160)
+        this.conf_bit_5 = new DisplaySubArea(this, 620, 380, 290, 160)
+        this.conf_bit_4 = new DisplaySubArea(this, 400, 58, 200, 150)
 
         return this;
     }
@@ -164,6 +167,52 @@ export class BioTecDisplay extends Display {
                         ${this.conditional(this.values["third_pump_demand"] == 1, this.conf_bit_01.createImage("peltec/demand_p.png", 20, 39, 12, null, 3))}
                         ${this.conditional(this.values["third_pump"] == 1, this.conf_bit_01.createImage("peltec/pumpaokrece.gif", 18, 12, 64, null, 2))}
                     `))}
+
+            <!-- Room - Konf 7 -->
+            ${this.conditional(this.hexBitIsSet(this.values["configuration"], 7),
+                this.conf_bit_7.createSubArea(1, "",
+                    html`
+                    `))}
+
+            <!-- Room - Konf 5 and 9 -->
+            ${this.conditional(
+                this.hexBitIsSet(this.values["configuration"], 5) && this.hexBitIsSet(this.values["configuration"], 9),
+                this.conf_bit_59.createSubArea(1, "",
+                    html`
+                    `))}
+
+            <!-- Room - Konf 9 -->
+            ${this.conditional(this.hexBitIsSet(this.values["configuration"], 9),
+                this.conf_bit_9.createSubArea(1, "",
+                    html`
+                    `))}
+
+            <!-- Room - Konf 5 -->
+            ${this.conditional(this.hexBitIsSet(this.values["configuration"], 5),
+                this.conf_bit_5.createSubArea(1, "",
+                    html`
+                    `))}
+
+            <!-- Room - Konf 4 -->
+            ${this.conditional(this.hexBitIsSet(this.values["configuration"], 4),
+                this.conf_bit_4.createSubArea(1, "",
+                    html`
+                    `))}
+
+            <!-- State Button -->
+            ${this.createText(this.values["boiler_state"], 32, "color: #ffffff; text-align: center;", 900, 450, 120, null, 2)}
+            ${this.conditional(
+                this.values["boiler_state"] !== "OFF",
+                this.createImage("peltec/playradi.gif", 942, 480, 40, null, 3)
+            )}
+            ${this.conditional(
+                this.values["boiler_state"] === "OFF",
+                this.createText("", 32,
+                "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "img/start_stop.png'); background-position: 0px 0px;",
+                945, 480, 36, 36, 2, -1))}
+            ${this.conditional(
+                this.values["command_active"] == 0 && this.values["boiler_state"] !== "OFF",
+                this.createImage("peltec/stopradi.gif", 942, 480, 36, "auto"))}
         `);
     }
 }
