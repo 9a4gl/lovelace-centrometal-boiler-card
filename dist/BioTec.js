@@ -38,6 +38,11 @@ export class BioTecDisplay extends Display {
             this.configureParameter(hass, "sensor.biotec", "room_target_correction", "optional")
             this.configureParameter(hass, "sensor.biotec", "third_pump", "optional")
             this.configureParameter(hass, "sensor.biotec", "third_pump_demand", "optional")
+            this.configureParameter(hass, "sensor.biotec", "domestic_hot_water", "optional")
+            this.configureParameter(hass, "sensor.biotec", "second_pump", "optional")
+            this.configureParameter(hass, "sensor.biotec", "second_pump_demand", "optional")
+            this.configureParameter(hass, "sensor.biotec", "circuit_1_measured_temperature", "optional")
+            this.configureParameter(hass, "sensor.biotec", "circuit_1_target_temperature", "optional")
 
         } catch (error) {
             return error;
@@ -191,12 +196,30 @@ export class BioTecDisplay extends Display {
             ${this.conditional(this.hexBitIsSet(this.values["configuration"], 5),
                 this.conf_bit_5.createSubArea(1, "",
                     html`
+                        ${this.conf_bit_5.createImage("biotec/dhw_part.png", 5, -70, 219, null, 1)}
+                        ${this.conditional(
+                            "domestic_hot_water" in this.values,
+                            this.conf_bit_5.createText(this.values["domestic_hot_water"] + "°C", 32, "color: #0000ff; text-align: center;", 130, -30, null, null, 2))}
+                        ${this.conditional(
+                            "second_pump" in this.values && this.values["second_pump"] == 1,
+                            this.conf_bit_5.createImage("peltec/pumpaokrece.gif", 17, 5, 64, null, 3))}
+                        ${this.conditional(
+                            "second_pump_demand" in this.values && this.values["second_pump_demand"] == 1,
+                            this.conf_bit_5.createImage("peltec/demand_p.gif", 19, 30, 12, null, 3))}
                     `))}
 
             <!-- Room - Konf 4 -->
             ${this.conditional(this.hexBitIsSet(this.values["configuration"], 4),
                 this.conf_bit_4.createSubArea(1, "",
                     html`
+                        ${this.conditional("circuit_1_measured_temperature" in this.values,
+                            this.conf_bit_4.createText(this.values["circuit_1_measured_temperature"] + "°C", 25, "color: #ffffff; text-align: center;", 10, -40, null, null, 1)
+                        )}
+                        ${this.conditional("circuit_1_target_temperature" in this.values,
+                            this.conf_bit_4.createText(this.values["circuit_1_target_temperature"] + "°C", 20, "color: #ff9900; text-align: center;", 110, -40, null, null, 1)
+                        )}
+                        ${this.conf_bit_4.createImage("biotec/pipeline_0.png", 0, 0, 101, "auto", 1)}
+                        ${this.conf_bit_4.createImage("peltec/senzorDugi.png", 80, -22, 20, "auto", 1)}
                     `))}
 
             <!-- State Button -->
