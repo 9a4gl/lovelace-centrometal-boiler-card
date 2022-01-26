@@ -177,6 +177,7 @@ export class BioTecDisplay extends Display {
             ${this.conditional(this.hexBitIsSet(this.values["configuration"], 7),
                 this.conf_bit_7.createSubArea(1, "",
                     html`
+                        ${this.conf_bit_7.createText("TODO: Not implemented Conf:7", 32, "", 0, 0, null, null, 2)};
                     `))}
 
             <!-- Room - Konf 5 and 9 -->
@@ -184,12 +185,14 @@ export class BioTecDisplay extends Display {
                 this.hexBitIsSet(this.values["configuration"], 5) && this.hexBitIsSet(this.values["configuration"], 9),
                 this.conf_bit_59.createSubArea(1, "",
                     html`
+                        ${this.conf_bit_7.createText("TODO: Not implemented Conf:5", 32, "", 0, 0, null, null, 2)};
                     `))}
 
             <!-- Room - Konf 9 -->
             ${this.conditional(this.hexBitIsSet(this.values["configuration"], 9),
                 this.conf_bit_9.createSubArea(1, "",
                     html`
+                    ${this.conf_bit_7.createText("TODO: Not implemented Conf:9", 32, "", 0, 0, null, null, 2)};
                     `))}
 
             <!-- Room - Konf 5 -->
@@ -205,7 +208,7 @@ export class BioTecDisplay extends Display {
                             this.conf_bit_5.createImage("peltec/pumpaokrece.gif", 17, 5, 64, null, 3))}
                         ${this.conditional(
                             "second_pump_demand" in this.values && this.values["second_pump_demand"] == 1,
-                            this.conf_bit_5.createImage("peltec/demand_p.gif", 19, 30, 12, null, 3))}
+                            this.conf_bit_5.createImage("peltec/demand_p.png", 19, 30, 12, null, 3))}
                     `))}
 
             <!-- Room - Konf 4 -->
