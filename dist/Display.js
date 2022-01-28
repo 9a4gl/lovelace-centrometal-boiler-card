@@ -2,21 +2,22 @@ import { DisplayArea } from "./DisplayArea.js"
 
 export class Display extends DisplayArea {
 
-    constructor(config, posx, posy, width, height) {
+    constructor(card, posx, posy, width, height) {
         super(posx, posy, width, height)
-        this.config = config
+        this.card = card
+        this.config = card.config
         this.parameters = {}
         this.values = {}
         this.card_id = "id_" + Math.random().toString(16).slice(2)
     }
 
-    configureParameter(hass, starts_with, name, opt = "") {
+    configureParameter(starts_with, name, opt = "") {
         if (name in this.config) {
             this.parameters[name] = this.config[name];
             return this.config[name];
         }
 
-        for (const property in hass.states) {
+        for (const property in this.card.hass.states) {
             if (property.startsWith(starts_with) && property.endsWith(name)) {
                 this.parameters[name] = property;
                 return property;

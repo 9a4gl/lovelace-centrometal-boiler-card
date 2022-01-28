@@ -63,12 +63,12 @@ class LovelaceCentrometalBoilerCard extends LitElement {
 
     switch (this.config["device_type"].toLowerCase()) {
       case 'peltec':
-        return new PelTecDisplay(this.config).configureDisplay(this.hass);
+        return new PelTecDisplay(this).configureDisplay();
       case 'cmpelet':
       case 'cm_pelet':
-        return new CmPeletDisplay(this.config).configureDisplay(this.hass);
+        return new CmPeletDisplay(this).configureDisplay();
       case 'biotec':
-        return new BioTecDisplay(this.config).configureDisplay(this.hass);
+        return new BioTecDisplay(this).configureDisplay();
     }
 
     return "Boiler type not suppored: " + this.config["device_type"] + ".";
@@ -94,9 +94,15 @@ class LovelaceCentrometalBoilerCard extends LitElement {
   }
 
   getCardSize() {
-    return 6;
+    return 3;
   }
 
 }
 
 customElements.define('centrometal-boiler-card', LovelaceCentrometalBoilerCard);
+
+console.info(
+  `%c centrometal-boiler-card %c`,
+  'color: orange; font-weight: bold; background: black',
+  'color: white; font-weight: bold; background: dimgray',
+)

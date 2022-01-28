@@ -7,37 +7,37 @@ import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js"
 
 export class CmPeletDisplay extends DisplayWithPowerButton {
 
-    constructor(config) {
-        super(config, 0, 0, 1024, 562)
+    constructor(card) {
+        super(card, 0, 0, 1024, 562)
     }
 
-    configureDisplay(hass) {
+    configureDisplay() {
         try {
-            this.configureParameter(hass, "sensor.cm_pelet", "boiler_state")
-            this.configureParameter(hass, "sensor.cm_pelet", "command_active")
-            this.configureParameter(hass, "sensor.cm_pelet", "firmware_version")
-            this.configureParameter(hass, "sensor.cm_pelet", "boiler_temperature")
-            this.configureParameter(hass, "sensor.cm_pelet", "fire_sensor")
-            this.configureParameter(hass, "sensor.cm_pelet", "heater_fan_state")
-            this.configureParameter(hass, "sensor.cm_pelet", "setup")
-            this.configureParameter(hass, "sensor.cm_pelet", "b_smd") // ??
+            this.configureParameter("sensor.cm_pelet", "boiler_state")
+            this.configureParameter("sensor.cm_pelet", "command_active")
+            this.configureParameter("sensor.cm_pelet", "firmware_version")
+            this.configureParameter("sensor.cm_pelet", "boiler_temperature")
+            this.configureParameter("sensor.cm_pelet", "fire_sensor")
+            this.configureParameter("sensor.cm_pelet", "heater_fan_state")
+            this.configureParameter("sensor.cm_pelet", "setup")
+            this.configureParameter("sensor.cm_pelet", "b_smd") // ??
 
             // Optional
-            this.configureParameter(hass, "sensor.cm_pelet", "outdoor_temperature", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "buffer_tank_up", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "buffer_tank_down", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "circuit_1_flow_temperature", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "circuit_1_pump", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "circuit_2_flow_temperature", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "circuit_2_pump", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "boiler_pump", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "b_zlj", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "boiler_operational", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "additional_features", "optional")
-            this.configureParameter(hass, "sensor.cm_pelet", "centroplus", "optional")
+            this.configureParameter("sensor.cm_pelet", "outdoor_temperature", "optional")
+            this.configureParameter("sensor.cm_pelet", "buffer_tank_up", "optional")
+            this.configureParameter("sensor.cm_pelet", "buffer_tank_down", "optional")
+            this.configureParameter("sensor.cm_pelet", "circuit_1_flow_temperature", "optional")
+            this.configureParameter("sensor.cm_pelet", "circuit_1_pump", "optional")
+            this.configureParameter("sensor.cm_pelet", "circuit_2_flow_temperature", "optional")
+            this.configureParameter("sensor.cm_pelet", "circuit_2_pump", "optional")
+            this.configureParameter("sensor.cm_pelet", "boiler_pump", "optional")
+            this.configureParameter("sensor.cm_pelet", "b_zlj", "optional")
+            this.configureParameter("sensor.cm_pelet", "boiler_operational", "optional")
+            this.configureParameter("sensor.cm_pelet", "additional_features", "optional")
+            this.configureParameter("sensor.cm_pelet", "centroplus", "optional")
 
             // Service
-            this.configureParameter(hass, "switch.cm_pelet", "boiler_switch")
+            this.configureParameter("switch.cm_pelet", "boiler_switch")
 
         } catch (error) {
             return error;

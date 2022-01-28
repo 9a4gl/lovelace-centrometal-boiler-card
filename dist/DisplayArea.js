@@ -74,19 +74,22 @@ export class DisplayArea {
         return str;
     }
 
-    createImage(image, left, top, width, height, zindex = 1)
+    createImage(image, left, top, width, height, zindex = 1, entity = "")
     {
+        const onClickFunction = () => { if (entity !== "") { this.showMoreInfo(this, entity) } }
         var style = this.createStyle("z-index: " + zindex + ";", left, top, width, height);
         image = this.images_folder + image;
-        return html`<img src="${image}" style="${style}" />`;
+        return html`<img src="${image}" style="${style}" @click=${onClickFunction} />`;
     }
 
-    createText(text, font_size, style, left, top, width = null, height = null, zindex = 2, padding = 10)
+    createText(text, font_size, style, left, top, width = null, height = null, zindex = 2, padding = null, entity = "")
     {
+        padding = (padding == null) ? 10 : padding
+        const onClickFunction = () => { if (entity !== "") { this.showMoreInfo(this, entity) } }
         style = this.createStyle(style, left, top, width, height, padding);
         style += "font-size: " + (font_size * this.factor).toString() + "px;";
         style += " font-family: 'Roboto', 'Helvetica'; text-align: center; vertical-align: top; font-weight: bold; z-index:" + zindex + "; margin: auto;";
-        return html`<span style="${style}">${text}</span>`;
+        return html`<span style="${style}" @click=${onClickFunction} >${text}</span>`;
     }
 
     conditional(cond, expr) {
@@ -99,5 +102,25 @@ export class DisplayArea {
             <img src="${this.images_folder}${background_image}" style="width: 100%; top: 0; left: 0; position: relative; border-radius: var(--ha-card-border-radius, 4px);" />
             ${content}
         </div>`;
+    }
+
+    showMoreInfo(display, name)
+    {
+        const event = new Event("hass-more-info", {
+          bubbles: true,
+          cancelable: Boolean(false),
+          composed: true,
+        });
+        // In case we are in sub area, we neede to go to top parent
+        while (!display.hasOwnProperty("parameters")) {
+            if (!display.hasOwnProperty("parent")) {
+                return
+            }
+            display = display.parent
+        }
+        event.detail = {
+            entityId: display.parameters[name]
+        };
+        display.card.dispatchEvent(event);
     }
 }

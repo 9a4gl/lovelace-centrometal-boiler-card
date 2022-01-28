@@ -7,38 +7,38 @@ import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js"
 
 export class PelTecDisplay extends DisplayWithPowerButton {
 
-    constructor(config) {
-        super(config, 0, 0, 1024, 580)
+    constructor(card) {
+        super(card, 0, 0, 1024, 580)
     }
 
-    configureDisplay(hass) {
+    configureDisplay() {
         try {
-            this.configureParameter(hass, "sensor.peltec", "boiler_state")
-            this.configureParameter(hass, "sensor.peltec", "command_active")
-            this.configureParameter(hass, "sensor.peltec", "fire_sensor")
-            this.configureParameter(hass, "sensor.peltec", "fan")
-            this.configureParameter(hass, "sensor.peltec", "boiler_pump")
-            this.configureParameter(hass, "sensor.peltec", "boiler_pump_demand")
-            this.configureParameter(hass, "sensor.peltec", "electric_heater")
-            this.configureParameter(hass, "sensor.peltec", "boiler_temperature")
-            this.configureParameter(hass, "sensor.peltec", "flue_gas")
-            this.configureParameter(hass, "sensor.peltec", "mixer_temperature")
-            this.configureParameter(hass, "sensor.peltec", "mixing_valve")
-            this.configureParameter(hass, "sensor.peltec", "configuration")
+            this.configureParameter("sensor.peltec", "boiler_state")
+            this.configureParameter("sensor.peltec", "command_active")
+            this.configureParameter("sensor.peltec", "fire_sensor")
+            this.configureParameter("sensor.peltec", "fan")
+            this.configureParameter("sensor.peltec", "boiler_pump")
+            this.configureParameter("sensor.peltec", "boiler_pump_demand")
+            this.configureParameter("sensor.peltec", "electric_heater")
+            this.configureParameter("sensor.peltec", "boiler_temperature")
+            this.configureParameter("sensor.peltec", "flue_gas")
+            this.configureParameter("sensor.peltec", "mixer_temperature")
+            this.configureParameter("sensor.peltec", "mixing_valve")
+            this.configureParameter("sensor.peltec", "configuration")
 
             // optional
-            this.configureParameter(hass, "sensor.peltec", "lambda_sensor", "optional")
-            this.configureParameter(hass, "sensor.peltec", "outdoor_temperature", "optional")
-            this.configureParameter(hass, "sensor.peltec", "tank_level", "optional")
-            this.configureParameter(hass, "sensor.peltec", "buffer_tank_temparature_up", "optional")
-            this.configureParameter(hass, "sensor.peltec", "buffer_tank_temparature_down", "optional")
-            this.configureParameter(hass, "sensor.peltec", "accessories", "optional")
-            this.configureParameter(hass, "sensor.peltec", "accessories_value", "optional")
-            this.configureParameter(hass, "sensor.peltec", "operation_mode", "optional")
-            this.configureParameter(hass, "sensor.peltec", "B_zlj", "optional")
+            this.configureParameter("sensor.peltec", "lambda_sensor", "optional")
+            this.configureParameter("sensor.peltec", "outdoor_temperature", "optional")
+            this.configureParameter("sensor.peltec", "tank_level", "optional")
+            this.configureParameter("sensor.peltec", "buffer_tank_temparature_up", "optional")
+            this.configureParameter("sensor.peltec", "buffer_tank_temparature_down", "optional")
+            this.configureParameter("sensor.peltec", "accessories", "optional")
+            this.configureParameter("sensor.peltec", "accessories_value", "optional")
+            this.configureParameter("sensor.peltec", "operation_mode", "optional")
+            this.configureParameter("sensor.peltec", "B_zlj", "optional")
 
             // Service
-            this.configureParameter(hass, "switch.peltec", "boiler_switch")
+            this.configureParameter("switch.peltec", "boiler_switch")
 
         } catch (error) {
             return error;
