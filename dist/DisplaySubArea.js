@@ -14,7 +14,7 @@ export class DisplaySubArea extends DisplayArea {
     createSubArea(z, extraStyle = "", content) {
         return html`
         <div style="${this.createStyle(
-            " z-index: " + z + ";" + extraStyle,
+            "z-index: " + z + "; " + extraStyle,
             this.asPercentage(this.area_posx, this.parent.area_width),
             this.asPercentage(this.area_posy, this.parent.area_height),
             this.asPercentage(this.area_width, this.parent.area_width),

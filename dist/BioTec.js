@@ -203,7 +203,7 @@ export class BioTecDisplay extends Display {
 
             <!-- Room - Konf 5 -->
             ${this.conditional(this.hexBitIsSet(this.values["configuration"], 5),
-                this.conf_bit_5.createSubArea(1, "",
+                this.conf_bit_5.createSubArea(1, "pointer-events: none;",
                     html`
                         ${this.conf_bit_5.createImage("biotec/dhw_part.png", 5, -70, 219, null, 1)}
                         ${this.conditional(
@@ -212,7 +212,7 @@ export class BioTecDisplay extends Display {
                                 130, -30, null, null, 2, null, "domestic_hot_water"))}
                         ${this.conditional(
                             "second_pump" in this.values && this.values["second_pump"] == 1,
-                            this.conf_bit_5.createImage("peltec/pumpaokrece.gif", 17, 5, 64, null, 3, "second_pump"))}
+                            this.conf_bit_5.createImage("peltec/pumpaokrece.gif", 17, 5, 64, null, 2, "second_pump"))}
                         ${this.conditional(
                             "second_pump_demand" in this.values && this.values["second_pump_demand"] == 1,
                             this.conf_bit_5.createImage("peltec/demand_p.png", 19, 30, 12, null, 3, "second_pump_demand"))}
@@ -220,7 +220,7 @@ export class BioTecDisplay extends Display {
 
             <!-- Room - Konf 4 -->
             ${this.conditional(this.hexBitIsSet(this.values["configuration"], 4),
-                this.conf_bit_4.createSubArea(1, "",
+                this.conf_bit_4.createSubArea(1, "pointer-events: none;",
                     html`
                         ${this.conditional("circuit_1_measured_temperature" in this.values,
                             this.conf_bit_4.createText(this.values["circuit_1_measured_temperature"] + "°C", 25, "color: #ffffff; text-align: center;",
