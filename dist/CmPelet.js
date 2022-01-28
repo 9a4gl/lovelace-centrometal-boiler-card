@@ -16,12 +16,11 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter(hass, "sensor.cm_pelet", "boiler_state")
             this.configureParameter(hass, "sensor.cm_pelet", "command_active")
             this.configureParameter(hass, "sensor.cm_pelet", "firmware_version")
-            this.configureParameter(hass, "sensor.cm_pelet", "b_smd") // ??
-            this.configureParameter(hass, "sensor.cm_pelet", "b_cp") // ??
             this.configureParameter(hass, "sensor.cm_pelet", "boiler_temperature")
             this.configureParameter(hass, "sensor.cm_pelet", "fire_sensor")
             this.configureParameter(hass, "sensor.cm_pelet", "heater_fan_state")
             this.configureParameter(hass, "sensor.cm_pelet", "setup")
+            this.configureParameter(hass, "sensor.cm_pelet", "b_smd") // ??
 
             // Optional
             this.configureParameter(hass, "sensor.cm_pelet", "outdoor_temperature", "optional")
@@ -35,6 +34,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter(hass, "sensor.cm_pelet", "b_zlj", "optional")
             this.configureParameter(hass, "sensor.cm_pelet", "boiler_operational", "optional")
             this.configureParameter(hass, "sensor.cm_pelet", "additional_features", "optional")
+            this.configureParameter(hass, "sensor.cm_pelet", "centroplus", "optional")
 
             // Service
             this.configureParameter(hass, "switch.cm_pelet", "boiler_switch")
@@ -65,7 +65,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
 
             <!-- boiler image on background -->
             ${this.conditional(
-                this.values["firmware_version"] > 'v1.25' && this.values["b_cp"] == 1,
+                this.values["firmware_version"] > 'v1.25' && this.values["centroplus"] == 1,
                 this.createImage("cmpelet/boiler_centroplus.png", -1, 9, 347, null, 0)
             )}
 
@@ -103,7 +103,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
 
             <!-- Fire -->
             ${this.conditional(
-                (this.values["firmware_version"] > 'v1.25' && this.values['b_cp'] == 1),
+                (this.values["firmware_version"] > 'v1.25' && this.values['centroplus'] == 1),
                 html`${this.fireArea.createSubArea(2, "",
                     html`
                         ${this.conditional(
