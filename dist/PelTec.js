@@ -179,7 +179,7 @@ export class PelTecDisplay extends DisplayWithPowerButton {
     }
 
     turnPelTecOff(root) {
-        root.hass.callService("switch", "turn_off", {entity_id: root.display.parameters["boiler_switch"]});
+        root.hass.callService("switch", "turn_off", { entity_id: root.display.parameters["boiler_switch"] });
     }
 
 }
