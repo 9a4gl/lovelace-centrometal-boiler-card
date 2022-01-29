@@ -78,6 +78,10 @@ export class DisplayArea {
     {
         const onClickFunction = () => { if (entity !== "") { this.showMoreInfo(this, entity) } }
         var style = this.createStyle("z-index: " + zindex + ";", left, top, width, height);
+        if (image.endsWith("!")) {
+            image = image.substring(0, image.length - 1);
+            style += " pointer-events: none;"
+        }
         image = this.images_folder + image;
         return html`<img src="${image}" style="${style}" @click=${onClickFunction} />`;
     }
@@ -92,8 +96,8 @@ export class DisplayArea {
         return html`<span style="${style}" @click=${onClickFunction} >${text}</span>`;
     }
 
-    conditional(cond, expr) {
-        return cond ? expr : html``;
+    conditional(cond, expr, else_expr = html``) {
+        return cond ? expr : else_expr;
     }
 
     createCard(background_image, content) {

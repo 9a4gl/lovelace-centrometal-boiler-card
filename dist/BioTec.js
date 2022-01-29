@@ -138,15 +138,37 @@ export class BioTecDisplay extends Display {
                     `))}
 
             <!- Pump -->
-            ${this.conditional(this.values["boiler_pump_demand"] == 1, this.createImage("peltec/demand_p.png", 260, 492, 12, null, 3, "boiler_pump_demand"))}
-            ${this.conditional(this.values["boiler_pump"] == 1, this.createImage("peltec/pumpaokrece.gif", 257, 465, 64, null, 2, "boiler_pump"))}
+            ${this.conditional(
+                this.values["boiler_pump_demand"] == 1,
+                this.createImage("peltec/demand_p.png", 260, 492, 12, null, 3, "boiler_pump_demand"),
+                this.createImage("transparent.png", 260, 492, 12, null, 3, "boiler_pump_demand"))}
+            ${this.conditional(
+                this.values["boiler_pump"] == 1,
+                this.createImage("peltec/pumpaokrece.gif", 257, 465, 64, null, 2, "boiler_pump"),
+                this.createImage("transparent.png", 257, 465, 64, null, 2, "boiler_pump"))}
+
+            <!-- Room - Konf 4 -->
+            ${this.conditional(this.hexBitIsSet(this.values["configuration"], 4),
+                this.conf_bit_4.createSubArea(1, "",
+                    html`
+                        ${this.conditional("circuit_1_measured_temperature" in this.values,
+                            this.conf_bit_4.createText(this.values["circuit_1_measured_temperature"] + "°C", 25, "color: #ffffff; text-align: center;",
+                                10, -40, null, null, 1, null, "circuit_1_measured_temperature")
+                        )}
+                        ${this.conditional("circuit_1_target_temperature" in this.values,
+                            this.conf_bit_4.createText(this.values["circuit_1_target_temperature"] + "°C", 20, "color: #ff9900; text-align: center;",
+                                110, -40, null, null, 1, null, "circuit_1_target_temperature")
+                        )}
+                        ${this.conf_bit_4.createImage("biotec/pipeline_0.png", 0, 0, 101, "auto", 1)}
+                        ${this.conf_bit_4.createImage("peltec/senzorDugi.png", 80, -22, 20, "auto", 1)}
+                    `))}
 
             <!-- Room - Konf 0 or 1 -->
             ${this.conditional(
                 this.hexBitIsSet(this.values["configuration"], 0) || this.hexBitIsSet(this.values["configuration"], 1),
                 this.conf_bit_01.createSubArea(1, "",
                     html`
-                        ${this.conf_bit_01.createImage("biotec/room_part.png", 5, 5, 431, "auto", 1)}
+                        ${this.conf_bit_01.createImage("biotec/room_part.png!", 5, 5, 431, "auto", 1)}
                         ${this.conditional(
                             this.hexBitIsSet(this.values["configuration"], 0),
                             this.conf_bit_01.createImage("peltec/radijatorCm2k.png", 145, 65, 90, "auto", 2))}
@@ -175,8 +197,14 @@ export class BioTecDisplay extends Display {
                             this.conf_bit_01.createText("+" + this.values["room_target_correction"] + "°C", 22, "color: #ff9900; text-align: left;",
                                 255, 35, null, null, 2, null, "room_target_correction"))}
                         <!-- pump -->
-                        ${this.conditional(this.values["third_pump_demand"] == 1, this.conf_bit_01.createImage("peltec/demand_p.png", 20, 39, 12, null, 3, "third_pump_demand"))}
-                        ${this.conditional(this.values["third_pump"] == 1, this.conf_bit_01.createImage("peltec/pumpaokrece.gif", 18, 12, 64, null, 2, "third_pump"))}
+                        ${this.conditional(
+                            this.values["third_pump_demand"] == 1,
+                            this.conf_bit_01.createImage("peltec/demand_p.png", 20, 39, 12, null, 3, "third_pump_demand"),
+                            this.conf_bit_01.createImage("transparent.png", 20, 39, 12, null, 3, "third_pump_demand"))}
+                        ${this.conditional(
+                            this.values["third_pump"] == 1,
+                            this.conf_bit_01.createImage("peltec/pumpaokrece.gif", 18, 12, 64, null, 2, "third_pump"),
+                            this.conf_bit_01.createImage("transparent.png", 18, 12, 64, null, 2, "third_pump"))}
                     `))}
 
             <!-- Room - Konf 7 -->
@@ -203,35 +231,21 @@ export class BioTecDisplay extends Display {
 
             <!-- Room - Konf 5 -->
             ${this.conditional(this.hexBitIsSet(this.values["configuration"], 5),
-                this.conf_bit_5.createSubArea(1, "pointer-events: none;",
+                this.conf_bit_5.createSubArea(1, "",
                     html`
-                        ${this.conf_bit_5.createImage("biotec/dhw_part.png", 5, -70, 219, null, 1)}
+                        ${this.conf_bit_5.createImage("biotec/dhw_part.png!", 5, -70, 219, null, 1)}
                         ${this.conditional(
                             "domestic_hot_water" in this.values,
                             this.conf_bit_5.createText(this.values["domestic_hot_water"] + "°C", 32, "color: #0000ff; text-align: center;",
                                 130, -30, null, null, 2, null, "domestic_hot_water"))}
                         ${this.conditional(
                             "second_pump" in this.values && this.values["second_pump"] == 1,
-                            this.conf_bit_5.createImage("peltec/pumpaokrece.gif", 17, 5, 64, null, 2, "second_pump"))}
+                            this.conf_bit_5.createImage("peltec/pumpaokrece.gif", 17, 5, 64, null, 2, "second_pump"),
+                            this.conf_bit_5.createImage("transparent.png", 17, 5, 64, null, 2, "second_pump"))}
                         ${this.conditional(
                             "second_pump_demand" in this.values && this.values["second_pump_demand"] == 1,
-                            this.conf_bit_5.createImage("peltec/demand_p.png", 19, 30, 12, null, 3, "second_pump_demand"))}
-                    `))}
-
-            <!-- Room - Konf 4 -->
-            ${this.conditional(this.hexBitIsSet(this.values["configuration"], 4),
-                this.conf_bit_4.createSubArea(1, "pointer-events: none;",
-                    html`
-                        ${this.conditional("circuit_1_measured_temperature" in this.values,
-                            this.conf_bit_4.createText(this.values["circuit_1_measured_temperature"] + "°C", 25, "color: #ffffff; text-align: center;",
-                                10, -40, null, null, 1, null, "circuit_1_measured_temperature")
-                        )}
-                        ${this.conditional("circuit_1_target_temperature" in this.values,
-                            this.conf_bit_4.createText(this.values["circuit_1_target_temperature"] + "°C", 20, "color: #ff9900; text-align: center;",
-                                110, -40, null, null, 1, null, "circuit_1_target_temperature")
-                        )}
-                        ${this.conf_bit_4.createImage("biotec/pipeline_0.png", 0, 0, 101, "auto", 1)}
-                        ${this.conf_bit_4.createImage("peltec/senzorDugi.png", 80, -22, 20, "auto", 1)}
+                            this.conf_bit_5.createImage("peltec/demand_p.png", 19, 30, 12, null, 3, "second_pump_demand"),
+                            this.conf_bit_5.createImage("transparent.png", 19, 30, 12, null, 3, "second_pump_demand"))}
                     `))}
 
             <!-- State Button -->
