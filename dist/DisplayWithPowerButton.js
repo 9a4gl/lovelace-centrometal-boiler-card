@@ -11,7 +11,7 @@ export class DisplayWithPowerButton extends Display {
         this.turnBoilerOff = turnBoilerOff
         return html`
         <button
-        style="${this.createStyle("margin: 0; border: 0px; vertical-align: top; z-index: 5; background-color: rgba(255,255,255,0.0);", 890, 410, 130, 170)}"
+        style="${this.createStyle("margin: 0; border: 0px; vertical-align: top; z-index: 5; background-color: rgba(255,255,255,0.0);", 890, this.area_height - 130, 130, 130)}"
         @click="${this.toggleBoilerOnOff}"></button>
 
         <!-- Turn On / Turn Off / Cancel popup -->

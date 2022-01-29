@@ -76,7 +76,12 @@ export class DisplayArea {
 
     createImage(image, left, top, width, height, zindex = 1, entity = "")
     {
-        const onClickFunction = () => { if (entity !== "") { this.showMoreInfo(this, entity) } }
+        const onClickFunction = () => {
+            const display = this.getDisplay(this)
+            if ((entity !== "") && (entity in display.values)) {
+                this.showMoreInfo(display, entity)
+            }
+        }
         var style = this.createStyle("z-index: " + zindex + ";", left, top, width, height);
         if (image.endsWith("!")) {
             image = image.substring(0, image.length - 1);
@@ -89,7 +94,12 @@ export class DisplayArea {
     createText(text, font_size, style, left, top, width = null, height = null, zindex = 2, padding = null, entity = "")
     {
         padding = (padding == null) ? 10 : padding
-        const onClickFunction = () => { if (entity !== "") { this.showMoreInfo(this, entity) } }
+        const onClickFunction = () => {
+            const display = this.getDisplay(this)
+            if ((entity !== "") && (entity in display.values)) {
+                this.showMoreInfo(display, entity)
+            }
+        }
         style = this.createStyle(style, left, top, width, height, padding);
         style += "font-size: " + (font_size * this.factor).toString() + "px;";
         style += " font-family: 'Roboto', 'Helvetica'; text-align: center; vertical-align: top; font-weight: bold; z-index:" + zindex + "; margin: auto;";
@@ -115,16 +125,20 @@ export class DisplayArea {
           cancelable: Boolean(false),
           composed: true,
         });
-        // In case we are in sub area, we neede to go to top parent
+        event.detail = {
+            entityId: display.parameters[name]
+        };
+        display.card.dispatchEvent(event);
+    }
+
+    getDisplay(display) {
+        // In case we are in sub area, we need to go to top parent
         while (!display.hasOwnProperty("parameters")) {
             if (!display.hasOwnProperty("parent")) {
                 return
             }
             display = display.parent
         }
-        event.detail = {
-            entityId: display.parameters[name]
-        };
-        display.card.dispatchEvent(event);
+        return display
     }
 }
