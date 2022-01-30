@@ -28,3 +28,5 @@ device_type: cmpelet
 type: custom:centrometal-boiler-card
 device_type: biotec
 ```
+
+![BioTec](https://github.com/9a4gl/lovelace-centrometal-boiler-card/raw/main/biotec-display.gif)
