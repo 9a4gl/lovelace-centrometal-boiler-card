@@ -87,7 +87,7 @@ export class DisplayArea {
             image = image.substring(0, image.length - 1);
             style += " pointer-events: none;"
         }
-        image = this.images_folder + image;
+        image = this.images_folder + image + "?v=0.0.16";
         return html`<img src="${image}" style="${style}" @click=${onClickFunction} />`;
     }
 
@@ -113,7 +113,7 @@ export class DisplayArea {
     createCard(background_image, content) {
         return html`
         <div class="card-content" style="position: relative; top: 0; left: 0; padding: 0px; width: auto; height: auto; line-height: ${20 * this.factor}px;">
-            <img src="${this.images_folder}${background_image}" style="width: 100%; top: 0; left: 0; position: relative; border-radius: var(--ha-card-border-radius, 4px);" />
+            <img src="${this.images_folder}${background_image}?v=0.0.16" style="width: 100%; top: 0; left: 0; position: relative; border-radius: var(--ha-card-border-radius, 4px);" />
             ${content}
         </div>`;
     }
