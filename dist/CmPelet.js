@@ -20,7 +20,6 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter("sensor.cm_pelet", "fire_sensor")
             this.configureParameter("sensor.cm_pelet", "heater_fan_state")
             this.configureParameter("sensor.cm_pelet", "setup")
-            this.configureParameter("sensor.cm_pelet", "b_smd") // ??
 
             // Optional
             this.configureParameter("sensor.cm_pelet", "outdoor_temperature", "optional")
@@ -35,6 +34,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter("sensor.cm_pelet", "boiler_operational", "optional")
             this.configureParameter("sensor.cm_pelet", "additional_features", "optional")
             this.configureParameter("sensor.cm_pelet", "centroplus", "optional")
+            this.configureParameter("sensor.cm_pelet", "b_smd", "optional", 0)
 
             // Service
             this.configureParameter("switch.cm_pelet", "boiler_switch")
@@ -66,8 +66,10 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             <!-- boiler image on background -->
             ${this.conditional(
                 this.values["firmware_version"] > 'v1.25' && this.values["centroplus"] == 1,
-                this.createImage("cmpelet/boiler_centroplus.png", -1, 9, 347, null, 0)
-            )}
+                this.createImage("cmpelet/boiler_centroplus.png", -1, 9, 347, null, 0))}
+            ${this.conditional(
+                this.values["firmware_version"] < 'v1.25',
+                this.createImage("cmpelet/boiler_pst_pellets.png", -1, 9, 386, null, 0))}
 
             <!-- Outdoor temperature -->
             ${this.createImage("cmpelet/vanjska.png", 890, 125, 20, "auto", 3, "outdoor_temperature")}
@@ -112,10 +114,41 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
                             this.values["fire_sensor"] < 1000,
                             this.fireArea.createText(this.values["fire_sensor"] + "k", 20, "color: #ffffff;", 25, 15, null, null, 3, -1, "fire_sensor"))}
                 `)}`)}
+            ${this.conditional(
+                (this.values["firmware_version"] > 'v1.25' && this.values['centroplus'] == 0),
+                html`${this.fireArea.createSubArea(2, "",
+                    html`
+                        ${this.conditional(
+                            this.values["fire_sensor"] >= 1000,
+                            this.fireArea.createText(">1M", 20, "color: #ffffff;", -100, 10, null, null, 3, null, "fire_sensor"))}
+                        ${this.conditional(
+                            this.values["fire_sensor"] < 1000,
+                            this.fireArea.createText(this.values["fire_sensor"] + "k", 20, "color: #ffffff;", -100, 10, null, null, 3, -1, "fire_sensor"))}
+                `)}`)}
+            ${this.conditional(
+                (this.values["firmware_version"] < 'v1.26'),
+                html`${this.fireArea.createSubArea(2, "",
+                    html`
+                        ${this.conditional(
+                            this.values["fire_sensor"] >= 1000,
+                            this.fireArea.createText(">1M", 20, "color: #ffffff;", -100, 10, null, null, 3, null, "fire_sensor"))}
+                        ${this.conditional(
+                            this.values["fire_sensor"] < 1000,
+                            this.fireArea.createText(this.values["fire_sensor"] + "k", 20, "color: #ffffff;", -100, 10, null, null, 3, -1, "fire_sensor"))}
+                `)}`)}
 
             <!-- Flame Image -->
             ${this.conditional(
-                (this.values["firmware_version"] > 'v1.25' && this.values['b_smd'] == 0),
+                (this.values["firmware_version"] > 'v1.25' && this.values['b_smd'] == 0 && this.values['centroplus'] == 0),
+                html`${this.flameArea.createSubArea(2, "",
+                    this.conditional(
+                        this.values["fire_sensor"] < 1000,
+                        this.flameArea.createImage("cmpelet/vatra2.gif", 10, 10, 120, "auto", 2, "fire_sensor"),
+                        this.flameArea.createImage("transparent.png", 10, 10, 120, "auto", 2, "fire_sensor"))
+                    )}
+                `)}
+            ${this.conditional(
+                (this.values["firmware_version"] > 'v1.25' && this.values['b_smd'] == 0 && this.values['centroplus'] == 1),
                 html`${this.flameArea.createSubArea(2, "",
                     this.conditional(
                         this.values["fire_sensor"] < 1000,
@@ -123,10 +156,26 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
                         this.flameArea.createImage("transparent.png", 60, 22, 100, "auto", 2, "fire_sensor"))
                     )}
                 `)}
+            ${this.conditional(
+                (this.values["firmware_version"] > 'v1.24' && this.values["firmware_version"] < 'v1.26'),
+                html`${this.flameArea.createSubArea(2, "",
+                    this.conditional(
+                        this.values["fire_sensor"] < 1000,
+                        this.flameArea.createImage("cmpelet/vatra2.gif", 10, 10, 120, "auto", 2, "fire_sensor"))
+                    )}
+                `)}
+            ${this.conditional(
+                (this.values["firmware_version"] < 'v1.25'),
+                html`${this.flameArea.createSubArea(2, "",
+                    this.conditional(
+                        this.values["fire_sensor"] < 1000,
+                        this.flameArea.createImage("cmpelet/vatra2.gif", 10, 10, 120, "auto", 2, "fire_sensor"))
+                    )}
+                `)}
 
             <!-- Fan -->
             ${this.conditional(
-                (this.values['b_smd'] == 0 || this.values["firmware_version"] < 'v1.25'),
+                ("centroplus" in this.values && this.values['centroplus'] == 1 && this.values["firmware_version"] > 'v1.25'),
                 html`${this.fanArea.createSubArea(2, "",
                     html`
                         ${this.conditional(
@@ -136,6 +185,30 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
                             this.values["heater_fan_state"] != 0,
                             this.fanArea.createImage("cmpelet/ventilator-pelet.gif", 22, 48, 44, null, 3, "heater_fan_state"))}
                         ${this.fanArea.createText(this.values["heater_fan_state"], 25, "color: #ffffff; text-align: center;", 20, 13, null, null, 3, -1, "heater_fan_state")}
+            `)}`)}
+            ${this.conditional(
+                ("centroplus" in this.values && this.values['centroplus'] == 0 && this.values["firmware_version"] > 'v1.25'),
+                html`${this.fanArea.createSubArea(2, "",
+                    html`
+                        ${this.conditional(
+                            this.values["heater_fan_state"] == 0,
+                            this.fanArea.createImage("cmpelet/ventilatorStoji.png", 70, 65, 44, null, 3, "heater_fan_state"))}
+                        ${this.conditional(
+                            this.values["heater_fan_state"] != 0,
+                            this.fanArea.createImage("cmpelet/ventilator-pelet.gif", 70, 65, 44, null, 3, "heater_fan_state"))}
+                        ${this.fanArea.createText(this.values["heater_fan_state"], 25, "color: #ffffff; text-align: center;", 95, 31, null, null, 3, -1, "heater_fan_state")}
+            `)}`)}
+            ${this.conditional(
+                (this.values["firmware_version"] < 'v1.26'),
+                html`${this.fanArea.createSubArea(2, "",
+                    html`
+                        ${this.conditional(
+                            this.values["heater_fan_state"] == 0,
+                            this.fanArea.createImage("cmpelet/ventilatorStoji.png", 70, 65, 44, null, 3, "heater_fan_state"))}
+                        ${this.conditional(
+                            this.values["heater_fan_state"] != 0,
+                            this.fanArea.createImage("cmpelet/ventilator-pelet.gif", 70, 65, 44, null, 3, "heater_fan_state"))}
+                        ${this.fanArea.createText(this.values["heater_fan_state"], 25, "color: #ffffff; text-align: center;", 95, 31, null, null, 3, -1, "heater_fan_state")}
             `)}`)}
 
             <!-- A.0.2 configuration -->

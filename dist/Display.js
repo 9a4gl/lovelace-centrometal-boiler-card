@@ -8,10 +8,11 @@ export class Display extends DisplayArea {
         this.config = card.config
         this.parameters = {}
         this.values = {}
+        this.values_if_missing = {}
         this.card_id = "id_" + Math.random().toString(16).slice(2)
     }
 
-    configureParameter(starts_with, name, opt = "") {
+    configureParameter(starts_with, name, opt = "", value_if_missing = null) {
         if (name in this.config) {
             this.parameters[name] = this.config[name];
             return this.config[name];
@@ -25,6 +26,11 @@ export class Display extends DisplayArea {
         }
 
         if (opt == "optional") {
+            if (value_if_missing != null) {
+                // Optional value, but if does not exist use provided "missing" value
+                this.values_if_missing[name] = value_if_missing
+                return true
+            }
             return false;
         }
 
@@ -38,6 +44,10 @@ export class Display extends DisplayArea {
             if (this.values[key] == "unavailable") {
                 this.values[key] = "-"
             }
+        }
+        // Add values for optional parameters that has value if missing
+        for (const [key, value] of Object.entries(this.values_if_missing)) {
+            this.values[key] = value
         }
     }
 
