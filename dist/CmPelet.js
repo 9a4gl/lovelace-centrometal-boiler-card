@@ -35,6 +35,8 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter("sensor.cm_pelet", "additional_features", "optional")
             this.configureParameter("sensor.cm_pelet", "centroplus", "optional")
             this.configureParameter("sensor.cm_pelet", "b_smd", "optional", 0)
+            this.configureParameter("sensor.cm_pelet", "freeze_guard", "optional")
+            this.configureParameter("sensor.cm_pelet", "freeze_monitor", "optional")
 
             // Service
             this.configureParameter("switch.cm_pelet", "boiler_switch")
@@ -47,6 +49,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
         this.fireArea = new DisplaySubArea(this, 130, 350, 190, 90)
         this.flameArea = new DisplaySubArea(this, 90, 392, 100, 70)
         this.fanArea = new DisplaySubArea(this, 220, 390, 140, 130)
+        this.a00area = new DisplaySubArea(this, 387, 10, 500, 550)
         this.a02area = new DisplaySubArea(this, 387, 10, 500, 550)
 
         return this;
@@ -211,6 +214,26 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
                         ${this.fanArea.createText(this.values["heater_fan_state"], 25, "color: #ffffff; text-align: center;", 95, 31, null, null, 3, -1, "heater_fan_state")}
             `)}`)}
 
+            ${this.conditional(
+                this.values["setup"] == "A.0.0",
+                this.a00area.createSubArea(2, "", html`
+                    ${this.a02area.createImage("cmpelet/akumulacijskiSpr.png", 160, 215, 140, "auto", 2)}
+                    ${this.conditional(
+                        "buffer_tank_up" in this.values,
+                        this.a02area.createText(this.values["buffer_tank_up"] + " °C", 32, "color: #0000ff;", 190, 275, null, null, 3, null, "buffer_tank_up")
+                    )}
+                    ${this.conditional(
+                        "buffer_tank_down" in this.values,
+                        this.a02area.createText(this.values["buffer_tank_down"] + " °C", 32, "color: #0000ff;", 190, 478, null, null, 3, null, "buffer_tank_down")
+                    )}
+                    ${this.a02area.createImage("cmpelet/a00_cjevovod.png", 0, 280, 160, "auto", 2)}
+                    ${this.a02area.createImage("cmpelet/pumpaStojiLijevo.png", 15, 457, 64, null, 3, "boiler_pump")}
+                    ${this.conditional(
+                        "boiler_pump" in this.values && this.values["boiler_pump"] == 1,
+                        this.a02area.createImage("cmpelet/pumpaokrece.gif", 15, 457, 64, null, 4, "boiler_pump")
+                    )}
+                `))}
+
             <!-- A.0.2 configuration -->
             ${this.conditional(
                 this.values["setup"] == "A.0.2",
@@ -271,6 +294,16 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             ${this.conditional(
                 "b_zlj" in this.values && (this.values["b_zlj"] == 0 || this.values["b_zlj"] == 2),
                 this.createImage("cmpelet/radijatorSlavina.png", 800, 10, 80, "auto", 2)
+            )}
+
+            <!-- Freeze Guard -->
+            ${this.conditional("freeze_guard" in this.values && this.values["freeze_guard"] == 1,
+                html`
+                    ${this.createImage("unit/freezMon.png", 935, 135, 50, "auto", 2, "freeze_guard")}
+                    ${this.conditional("freeze_monitor" in this.values && this.values["freeze_monitor"] == 10,
+                        this.createImage("unit/cx.png", 935, 140, 50, "auto", 3, "freeze_monitor")
+                )}`,
+                this.createImage("transparent.png", 935, 135, 50, "auto", 2, "freeze_guard")
             )}
 
             <!-- Boiler power button -->
