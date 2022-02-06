@@ -30,7 +30,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter("sensor.cm_pelet", "circuit_2_flow_temperature", "optional")
             this.configureParameter("sensor.cm_pelet", "circuit_2_pump", "optional")
             this.configureParameter("sensor.cm_pelet", "boiler_pump", "optional")
-            this.configureParameter("sensor.cm_pelet", "b_zlj", "optional")
+            this.configureParameter("sensor.cm_pelet", "operation_mode", "optional")
             this.configureParameter("sensor.cm_pelet", "boiler_operational", "optional")
             this.configureParameter("sensor.cm_pelet", "additional_features", "optional")
             this.configureParameter("sensor.cm_pelet", "centroplus", "optional")
@@ -292,7 +292,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
 
             <!-- Tap/radiator mode -->
             ${this.conditional(
-                "b_zlj" in this.values && (this.values["b_zlj"] == 0 || this.values["b_zlj"] == 2),
+                "operation_mode" in this.values && (this.values["operation_mode"] == 0 || this.values["operation_mode"] == 2),
                 this.createImage("cmpelet/radijatorSlavina.png", 800, 10, 80, "auto", 2)
             )}
 

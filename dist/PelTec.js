@@ -35,7 +35,6 @@ export class PelTecDisplay extends DisplayWithPowerButton {
             this.configureParameter("sensor.peltec", "accessories", "optional")
             this.configureParameter("sensor.peltec", "accessories_value", "optional")
             this.configureParameter("sensor.peltec", "operation_mode", "optional")
-            this.configureParameter("sensor.peltec", "B_zlj", "optional")
 
             // Service
             this.configureParameter("switch.peltec", "boiler_switch")
@@ -136,10 +135,10 @@ export class PelTecDisplay extends DisplayWithPowerButton {
 
             <!-- Tap/radiator mode -->
             ${this.conditional(
-                "b_zlj" in this.values,
-                html`${this.conditional(this.values["b_zlj"] == 0, this.createImage("cmpelet/radijatorSlavina.png", 800, 10, 80, "auto", 2))}
-                     ${this.conditional(this.values["b_zlj"] == 1, this.createImage("cmpelet/slavina.png", 800, 10, 80, "auto", 2))}
-                     ${this.conditional(this.values["b_zlj"] == 2, this.createImage("cmpelet/radijatorSlavina.png", 800, 10, 80, "auto", 2))}`)}
+                "operation_mode" in this.values,
+                html`${this.conditional(this.values["operation_mode"] == 0, this.createImage("cmpelet/radijatorSlavina.png", 800, 10, 80, "auto", 2))}
+                     ${this.conditional(this.values["operation_mode"] == 1, this.createImage("cmpelet/slavina.png", 800, 10, 80, "auto", 2))}
+                     ${this.conditional(this.values["operation_mode"] == 2, this.createImage("cmpelet/radijatorSlavina.png", 800, 10, 80, "auto", 2))}`)}
 
             <!-- Buffer -->
             ${this.conditional(
