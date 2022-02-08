@@ -13,13 +13,28 @@ export class Display extends DisplayArea {
     }
 
     configureParameter(starts_with, name, opt = "", value_if_missing = null) {
+        var alternative_name = null
+        if (name.includes("|")) {
+            const array = name.split("|")
+            name = array[0]
+            alternative_name = array[1]
+        }
         if (name in this.config) {
             this.parameters[name] = this.config[name];
             return this.config[name];
         }
-
+        if (alternative_name in this.config) {
+            this.parameters[name] = this.config[alternative_name];
+            return this.config[name];
+        }
         for (const property in this.card.hass.states) {
             if (property.startsWith(starts_with) && property.endsWith(name)) {
+                this.parameters[name] = property;
+                return property;
+            }
+        }
+        for (const property in this.card.hass.states) {
+            if (property.startsWith(starts_with) && property.endsWith(alternative_name)) {
                 this.parameters[name] = property;
                 return property;
             }
