@@ -30,7 +30,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter("sensor.cm_pelet", "circuit_2_flow_temperature", "optional")
             this.configureParameter("sensor.cm_pelet", "circuit_2_pump", "optional")
             this.configureParameter("sensor.cm_pelet", "boiler_pump", "optional")
-            this.configureParameter("sensor.cm_pelet", "operation_mode", "optional")
+            this.configureParameter("sensor.cm_pelet", "operation_mode|b_zlj", "optional")
             this.configureParameter("sensor.cm_pelet", "boiler_operational", "optional")
             this.configureParameter("sensor.cm_pelet", "additional_features", "optional")
             this.configureParameter("sensor.cm_pelet", "centroplus", "optional")

@@ -25,17 +25,20 @@ export class BioTecPlusDisplay extends Display {
             this.configureParameter("sensor.biotec", "boiler_temperature_pellet|B_Tk1p")
             this.configureParameter("sensor.biotec", "firebox_temperature")
             this.configureParameter("sensor.biotec", "glow")
+            this.configureParameter("sensor.biotec", "boiler_pump|b_p1")
+            this.configureParameter("sensor.biotec", "boiler_pump_demand|b_zahp1")
+            this.configureParameter("sensor.biotec", "flue_gas|b_tdpl1")
+            this.configureParameter("sensor.biotec", "wood_pellet_mode|b_pbs")
             //
-            this.configureParameter("sensor.biotec", "flue_gas")
             this.configureParameter("sensor.biotec", "configuration")
-            this.configureParameter("sensor.biotec", "boiler_pump")
-            this.configureParameter("sensor.biotec", "boiler_pump_demand")
             this.configureParameter("sensor.biotec", "command_active")
 
             // optional
             this.configureParameter("sensor.biotec", "outdoor_temperature", "optional")
+            this.configureParameter("sensor.biotec", "lambda_sensor|b_oxy1", "optional")
+            this.configureParameter("sensor.peltec", "tank_level|b_razina", "optional")
+            this.configureParameter("sensor.cm_pelet", "operation_mode|b_zlj", "optional")
             //
-            this.configureParameter("sensor.biotec", "lambda_sensor", "optional")
             this.configureParameter("sensor.biotec", "accessories_value", "optional")
             this.configureParameter("sensor.biotec", "circuit_1_correction_type", "optional")
             this.configureParameter("sensor.biotec", "room_measured_temperature", "optional")
@@ -135,6 +138,61 @@ export class BioTecPlusDisplay extends Display {
                 this.createImage("biotec/glow.png", 65, 435, 100, "auto", 3, "glow")
             )}
 
+            <!- Pump -->
+            ${this.conditional(
+                this.values["boiler_pump_demand"] == 1,
+                this.createImage("peltec/demand_p.png", 443, 492, 12, null, 3, "boiler_pump_demand"),
+                this.createImage("transparent.png", 443, 492, 12, null, 3, "boiler_pump_demand"))}
+            ${this.conditional(
+                this.values["boiler_pump"] == 1,
+                this.createImage("peltec/pumpaokrece.gif", 442, 465, 64, null, 2, "boiler_pump"),
+                this.createImage("transparent.png", 442, 465, 64, null, 2, "boiler_pump"))}
+
+            <!-- Flue gas temperature -->
+            ${this.createText(this.values["flue_gas"] + "°C", 28, "color: #FFFFFF;",  5, 15, null, null, 5, null, "flue_gas")}
+            ${this.createImage("peltec/senzor_b_1.png", 120, 34, 40, null, 8)}
+
+            <!-- Oxygen (lambda) sensor -->
+            ${this.conditional(
+                "lambda_sensor" in this.values && this.values["lambda_sensor"] > 0.1,
+                html`${this.createImage("peltec/senzor_b_2.png", 75, 35, 40, null, 8)}
+                     ${this.createText(html`
+                        ${this.values["lambda_sensor"] < 25.4 ? this.values["lambda_sensor"] : "-.-"}%`, 28,
+                         "color: #ffffff; text-align: center;", 175, 30, null, null, 5, null, "lambda_sensor")}`)}
+
+            <!-- Pellet tank level -->
+            ${this.conditional(
+                'tank_level' in this.values,
+                html`${this.conditional(this.values["tank_level"] == "Full",
+                        this.createImage("biopl/fuel_2.png", 380, 138, 13, "auto", 2, "tank_level"))}
+                    ${this.conditional(this.values["tank_level"] == "Reserve",
+                        this.createImage("biopl/fuel_1.png", 380, 138, 13, "auto", 2, "tank_level"))}
+                    ${this.conditional(this.values["tank_level"] == "Empty",
+                        this.createImage("biopl/fuel_0.png", 380, 138, 13, "auto", 2, "tank_level"))}`)}
+
+            <!-- Tap/radiator mode -->
+            ${this.conditional(
+                "operation_mode" in this.values && (this.values["operation_mode"] == 1),
+                this.createImage("cmpelet/slavina.png", 930, 10, 80, "auto", 2)
+            )}
+            ${this.conditional(
+                "operation_mode" in this.values && (this.values["operation_mode"] == 0 || this.values["operation_mode"] == 2),
+                this.createImage("cmpelet/radijator.png", 930, 10, 80, "auto", 2)
+            )}
+
+            <!-- Wood or pellet selection -->
+            ${this.showWoodAndPelletSelection()}
+
         `);
+    }
+
+    showWoodAndPelletSelection() {
+        this.woodBoilerShadow = new DisplaySubArea(this, 1, 120, 220, 439)
+        this.pelletBoilerShadow = new DisplaySubArea(this, 221, 120, 192, 439)
+        return html`
+            ${this.conditional(this.values["wood_pellet_mode"] == 1,
+                this.woodBoilerShadow.createSubArea(4, "border: none; background-color: #258095; opacity: 0.9;", html``),
+                this.pelletBoilerShadow.createSubArea(4, "border: none; background-color: #258095; opacity: 0.9;", html``)
+            )}`
     }
 }
