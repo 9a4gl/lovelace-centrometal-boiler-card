@@ -13,45 +13,32 @@ export class BioTecPlusDisplay extends Display {
 
     configureDisplay() {
         try {
-            this.configureParameter("sensor.biotec", "boiler_state")
-            this.configureParameter("sensor.biotec", "fire_sensor")
-            this.configureParameter("sensor.biotec", "fan")
-            this.configureParameter("sensor.biotec", "air_flow_engine_primary")
-            this.configureParameter("sensor.biotec", "air_flow_engine_secondary")
+            this.configureParameter("sensor.biotec", "boiler_state|b_state")
+            this.configureParameter("sensor.biotec", "fire_sensor|b_fotb")
+            this.configureParameter("sensor.biotec", "fan|b_fan")
+            this.configureParameter("sensor.biotec", "air_flow_engine_primary|b_pris")
+            this.configureParameter("sensor.biotec", "air_flow_engine_secondary|b_secs")
             this.configureParameter("sensor.biotec", "pellet_dispenzer|b_doz")
-            this.configureParameter("sensor.biotec", "buffer_tank_temparature_up")
-            this.configureParameter("sensor.biotec", "buffer_tank_temparature_down")
-            this.configureParameter("sensor.biotec", "boiler_temperature_wood|B_Tk1b")
-            this.configureParameter("sensor.biotec", "boiler_temperature_pellet|B_Tk1p")
-            this.configureParameter("sensor.biotec", "firebox_temperature")
-            this.configureParameter("sensor.biotec", "glow")
+            this.configureParameter("sensor.biotec", "buffer_tank_temparature_up|b_tak1_1")
+            this.configureParameter("sensor.biotec", "buffer_tank_temparature_down|b_tak2_1")
+            this.configureParameter("sensor.biotec", "boiler_temperature_wood|b_tk1b")
+            this.configureParameter("sensor.biotec", "boiler_temperature_pellet|b_tk1p")
+            this.configureParameter("sensor.biotec", "firebox_temperature|b_tlo1")
+            this.configureParameter("sensor.biotec", "glow|b_zar")
             this.configureParameter("sensor.biotec", "boiler_pump|b_p1")
             this.configureParameter("sensor.biotec", "boiler_pump_demand|b_zahp1")
             this.configureParameter("sensor.biotec", "flue_gas|b_tdpl1")
             this.configureParameter("sensor.biotec", "wood_pellet_mode|b_pbs")
+            this.configureParameter("sensor.biotec", "control_mode|b_scs")
             //
-            this.configureParameter("sensor.biotec", "configuration")
-            this.configureParameter("sensor.biotec", "command_active")
+            this.configureParameter("sensor.biotec", "configuration|b_konf")
+            this.configureParameter("sensor.biotec", "command_active|b_cmd")
 
             // optional
-            this.configureParameter("sensor.biotec", "outdoor_temperature", "optional")
+            this.configureParameter("sensor.biotec", "outdoor_temperature|b_tva1", "optional")
             this.configureParameter("sensor.biotec", "lambda_sensor|b_oxy1", "optional")
-            this.configureParameter("sensor.peltec", "tank_level|b_razina", "optional")
-            this.configureParameter("sensor.cm_pelet", "operation_mode|b_zlj", "optional")
-            //
-            this.configureParameter("sensor.biotec", "accessories_value", "optional")
-            this.configureParameter("sensor.biotec", "circuit_1_correction_type", "optional")
-            this.configureParameter("sensor.biotec", "room_measured_temperature", "optional")
-            this.configureParameter("sensor.biotec", "room_target_temperature", "optional")
-            this.configureParameter("sensor.biotec", "room_target_correction", "optional")
-            this.configureParameter("sensor.biotec", "third_pump", "optional")
-            this.configureParameter("sensor.biotec", "third_pump_demand", "optional")
-            this.configureParameter("sensor.biotec", "domestic_hot_water", "optional")
-            this.configureParameter("sensor.biotec", "second_pump", "optional")
-            this.configureParameter("sensor.biotec", "second_pump_demand", "optional")
-            this.configureParameter("sensor.biotec", "circuit_1_measured_temperature", "optional")
-            this.configureParameter("sensor.biotec", "circuit_1_target_temperature", "optional")
-
+            this.configureParameter("sensor.biotec", "tank_level|b_razina", "optional")
+            this.configureParameter("sensor.biotec", "operation_mode|b_zlj", "optional")
         } catch (error) {
             return error;
         }
@@ -183,7 +170,26 @@ export class BioTecPlusDisplay extends Display {
             <!-- Wood or pellet selection -->
             ${this.showWoodAndPelletSelection()}
 
+            <!-- Boiler State -->
+            ${this.createText(this.values["boiler_state"], 32, "text-align:center;color: #ffffff;", 900, 350, 120, null, 4, null, "boiler_state")}
+
+            <!-- Boiiler state icon -->
+            ${this.conditional(this.values["boiler_state"] != "OFF",
+                this.createImage("peltec/playradi.gif", 942, 390, 40, null, 4, "boiler_state"),
+                this.createText("", 32,
+                    "display:block;background-repeat: no-repeat; background-image: url('/img/start_stop.png'); background-position: 0px 0px;",
+                    945, 390, 36, 36, 4, null, "boiler_state"))}
+
+            ${this.hideOnOffButtonWhenInWoodMode()}
         `);
+    }
+
+    hideOnOffButtonWhenInWoodMode() {
+        this.buttonArea = new DisplaySubArea(this, 904, 439, 114, 114);
+        return html`
+            ${this.conditional(this.values["wood_pellet_mode"] == 0,
+                this.buttonArea.createSubArea(4, "border: none; border-radius: 50%; background-color: #258095; opacity: 0.9;", html``)
+        )}`
     }
 
     showWoodAndPelletSelection() {
