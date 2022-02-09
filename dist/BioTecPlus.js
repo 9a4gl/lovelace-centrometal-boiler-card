@@ -30,9 +30,7 @@ export class BioTecPlusDisplay extends Display {
             this.configureParameter("sensor.biotec", "flue_gas|b_tdpl1")
             this.configureParameter("sensor.biotec", "wood_pellet_mode|b_pbs")
             this.configureParameter("sensor.biotec", "control_mode|b_scs")
-            //
             this.configureParameter("sensor.biotec", "configuration|b_konf")
-            this.configureParameter("sensor.biotec", "command_active|b_cmd")
 
             // optional
             this.configureParameter("sensor.biotec", "outdoor_temperature|b_tva1", "optional")
@@ -167,9 +165,6 @@ export class BioTecPlusDisplay extends Display {
                 this.createImage("cmpelet/radijator.png", 930, 10, 80, "auto", 2)
             )}
 
-            <!-- Wood or pellet selection -->
-            ${this.showWoodAndPelletSelection()}
-
             <!-- Boiler State -->
             ${this.createText(this.values["boiler_state"], 32, "text-align:center;color: #ffffff;", 900, 350, 120, null, 4, null, "boiler_state")}
 
@@ -180,6 +175,10 @@ export class BioTecPlusDisplay extends Display {
                     "display:block;background-repeat: no-repeat; background-image: url('/img/start_stop.png'); background-position: 0px 0px;",
                     945, 390, 36, 36, 4, null, "boiler_state"))}
 
+            <!-- Wood or pellet selection -->
+            ${this.showWoodAndPelletSelection()}
+
+            <!-- disable on/off button if necessary -->
             ${this.hideOnOffButtonWhenInWoodMode()}
         `);
     }
