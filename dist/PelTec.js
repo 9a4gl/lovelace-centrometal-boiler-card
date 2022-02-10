@@ -2,8 +2,8 @@ import {
     html,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.17"
-import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js?v=0.0.17"
+import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.18"
+import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js?v=0.0.18"
 
 export class PelTecDisplay extends DisplayWithPowerButton {
 

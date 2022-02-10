@@ -2,8 +2,8 @@ import {
     html,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.17"
-import { Display } from "./Display.js?v=0.0.17"
+import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.18"
+import { Display } from "./Display.js?v=0.0.18"
 
 export class BioTecPlusDisplay extends Display {
 
@@ -37,18 +37,12 @@ export class BioTecPlusDisplay extends Display {
             this.configureParameter("sensor.biotec", "lambda_sensor|b_oxy1", "optional")
             this.configureParameter("sensor.biotec", "tank_level|b_razina", "optional")
             this.configureParameter("sensor.biotec", "operation_mode|b_zlj", "optional")
+            this.configureParameter("sensor.biotec", "second_pump|b_p2", "optional")
+            this.configureParameter("sensor.biotec", "second_pump_demand|b_zahp2", "optional")
+            this.configureParameter("sensor.biotec", "domestic_hot_water|b_tptv1", "optional")
         } catch (error) {
             return error;
         }
-
-        // define Sub areas of display
-        // this.cskTouchArea = new DisplaySubArea(this, 225, 85, 100, 50)
-        // this.conf_bit_01 = new DisplaySubArea(this, 490, 40, 450, 190)
-        // this.conf_bit_7 = new DisplaySubArea(this, 631, 380, 260, 170)
-        // this.conf_bit_59 = new DisplaySubArea(this, 470, 20, 300, 160)
-        // this.conf_bit_9 = new DisplaySubArea(this, 620, 380, 290, 160)
-        // this.conf_bit_5 = new DisplaySubArea(this, 620, 380, 290, 160)
-        // this.conf_bit_4 = new DisplaySubArea(this, 400, 58, 200, 150)
 
         return this;
     }
@@ -105,17 +99,17 @@ export class BioTecPlusDisplay extends Display {
             <!-- Boiler temperature  -->
             ${this.conditional(
                 "boiler_temperature_wood" in this.values,
-                this.createText(this.values["boiler_temperature_wood"] + " °C", 34, "color: #000000;",
+                this.createText(this.formatTemperature("boiler_temperature_wood") + " °C", 34, "color: #000000;",
                     35, 90, null, null, 7, null, "boiler_temperature_wood")
             )}
             ${this.conditional(
                 "boiler_temperature_pellet" in this.values,
-                this.createText(this.values["boiler_temperature_pellet"] + " °C", 34, "color: #000000;",
+                this.createText(this.formatTemperature("boiler_temperature_pellet") + " °C", 34, "color: #000000;",
                     300, 90, null, null, 7, null, "boiler_temperature_pellet")
             )}
 
             <!-- Firefox temperature -->
-            ${this.createText(this.values["firebox_temperature"] + "°C", 30, "color: #000000;", 65, 510, null, null, 4, null, "firebox_temperature")}
+            ${this.createText(this.formatTemperature("firebox_temperature") + "°C", 30, "color: #000000;", 65, 510, null, null, 4, null, "firebox_temperature")}
 
             <!-- Glow -->
             ${this.conditional(
@@ -134,7 +128,7 @@ export class BioTecPlusDisplay extends Display {
                 this.createImage("transparent.png", 442, 465, 64, null, 2, "boiler_pump"))}
 
             <!-- Flue gas temperature -->
-            ${this.createText(this.values["flue_gas"] + "°C", 28, "color: #FFFFFF;",  5, 15, null, null, 5, null, "flue_gas")}
+            ${this.createText(this.formatTemperature("flue_gas") + "°C", 28, "color: #FFFFFF;",  5, 15, null, null, 5, null, "flue_gas")}
             ${this.createImage("peltec/senzor_b_1.png", 120, 34, 40, null, 8)}
 
             <!-- Oxygen (lambda) sensor -->
@@ -175,6 +169,10 @@ export class BioTecPlusDisplay extends Display {
                     "display:block;background-repeat: no-repeat; background-image: url('/img/start_stop.png'); background-position: 0px 0px;",
                     945, 390, 36, 36, 4, null, "boiler_state"))}
 
+            <!-- Buffers -->
+            ${this.showMainBuffer()}
+            ${this.showDHWBuffer()}
+
             <!-- Wood or pellet selection -->
             ${this.showWoodAndPelletSelection()}
 
@@ -199,5 +197,41 @@ export class BioTecPlusDisplay extends Display {
                 this.woodBoilerShadow.createSubArea(4, "border: none; background-color: #258095; opacity: 0.9;", html``),
                 this.pelletBoilerShadow.createSubArea(4, "border: none; background-color: #258095; opacity: 0.9;", html``)
             )}`
+    }
+
+    showMainBuffer() {
+        this.mainBufferArea = new DisplaySubArea(this, 580, 180, 200, 300)
+        return this.conditional(
+            this.hexBitIsClear(this.values["configuration"], 11),
+            this.mainBufferArea.createSubArea(1, "", html`
+                ${this.mainBufferArea.createImage("biopl/akuSpremnik.png", 0, 0, 174, null, 2, "")}
+                ${this.mainBufferArea.createText(
+                    this.formatTemperature("buffer_tank_temparature_up") + " °C", 32, "color: #0000ff; text-align: center;",
+                    55, 65, null, null, 2, null, "buffer_tank_temparature_up")}
+                ${this.mainBufferArea.createText(
+                    this.formatTemperature("buffer_tank_temparature_down") + " °C", 32, "color: #0000ff; text-align: center;",
+                    55, 283, null, null, 2, null, "buffer_tank_temparature_down")}
+            `))
+    }
+
+    showDHWBuffer() {
+        this.dhwBufferArea = new DisplaySubArea(this, 755, 180, 150, 360)
+        return this.conditional(
+            this.hexBitIsSet(this.values["configuration"], 5),
+            this.dhwBufferArea.createSubArea(1, "", html`
+                ${this.dhwBufferArea.createImage("biopl/dhw.png", 3, 98, 138, null, 3, "")}
+                ${this.dhwBufferArea.createText(
+                    this.formatTemperature("domestic_hot_water") + " °C", 32, "color: #0000ff; text-align: center;",
+                    48, 133, null, null, 4, null, "domestic_hot_water")}
+                    <!- Pump -->
+                    ${this.conditional(
+                        this.values["second_pump_demand"] == 1,
+                        this.dhwBufferArea.createImage("peltec/demand_p.png", 5, 199, 12, null, 5, "second_pump_demand"),
+                        this.dhwBufferArea.createImage("transparent.png", 5, 199, 12, null, 5, "second_pump_demand"))}
+                    ${this.conditional(
+                        this.values["second_pump"] == 1,
+                        this.dhwBufferArea.createImage("peltec/pumpaokrece.gif", 4, 172, 64, null, 5, "second_pump"),
+                        this.dhwBufferArea.createImage("transparent.png", 4, 172, 64, null, 2, "second_pump"))}
+            `))
     }
 }
