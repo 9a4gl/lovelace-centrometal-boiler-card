@@ -2,8 +2,8 @@ import {
     html,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.18"
-import { Display } from "./Display.js?v=0.0.18"
+import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.19"
+import { Display } from "./Display.js?v=0.0.19"
 
 export class BioTecDisplay extends Display {
 
