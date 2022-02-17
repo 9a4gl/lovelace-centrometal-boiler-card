@@ -3,9 +3,9 @@ import {
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
 import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.18"
-import { Display } from "./Display.js?v=0.0.18"
+import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js?v=0.0.18"
 
-export class BioTecPlusDisplay extends Display {
+export class BioTecPlusDisplay extends DisplayWithPowerButton {
 
     constructor(card) {
         super(card, 0, 0, 1024, 562)
@@ -40,6 +40,10 @@ export class BioTecPlusDisplay extends Display {
             this.configureParameter("sensor.biotec", "second_pump|b_p2", "optional")
             this.configureParameter("sensor.biotec", "second_pump_demand|b_zahp2", "optional")
             this.configureParameter("sensor.biotec", "domestic_hot_water|b_tptv1", "optional")
+
+            // Service
+            this.configureParameter("switch.biotec", "boiler_switch")
+
         } catch (error) {
             return error;
         }
@@ -176,9 +180,20 @@ export class BioTecPlusDisplay extends Display {
             <!-- Wood or pellet selection -->
             ${this.showWoodAndPelletSelection()}
 
+            <!-- Boiler power button -->
+            ${this.createPowerButton(function (root) { this.turnBioTecPlusPelletOn(root); }, function (root) { this.turnBioTecPlusPelletOff(root); })}
+
             <!-- disable on/off button if necessary -->
             ${this.hideOnOffButtonWhenInWoodMode()}
         `);
+    }
+
+    turnBioTecPlusPelletOn(root) {
+        root.hass.callService("switch", "turn_on", {entity_id: root.display.parameters["boiler_switch"]});
+    }
+
+    turnBioTecPlusPelletOff(root) {
+        root.hass.callService("switch", "turn_off", {entity_id: root.display.parameters["boiler_switch"]});
     }
 
     hideOnOffButtonWhenInWoodMode() {
