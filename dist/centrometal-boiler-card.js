@@ -14,6 +14,7 @@ class LovelaceCentrometalBoilerCard extends LitElement {
     super();
     this.display = null;
     this.configured = false;
+    this.mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   }
 
   static get properties() {
@@ -88,6 +89,7 @@ class LovelaceCentrometalBoilerCard extends LitElement {
       }
       this.configured = true;
     }
+
     return html`<ha-card><p></p>${this.display.createContent(this.hass)}</ha-card>`;
   }
 

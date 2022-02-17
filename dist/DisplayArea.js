@@ -4,12 +4,16 @@ import {
 
 export class DisplayArea {
 
-    constructor(posx, posy, width, height) {
+    constructor(posx, posy, width, height, mobile) {
         this.area_posx = posx
         this.area_posy = posy
         this.area_width = width;
         this.area_height = height;
+        this.mobile = mobile
         this.factor = 468 / 1024; // Used for font scaling
+        if (mobile) {
+            this.factor = 0.75 * this.factor;
+        }
         this.images_folder = "/local/community/lovelace-centrometal-boiler-card/images/"
     }
 

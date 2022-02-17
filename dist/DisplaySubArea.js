@@ -7,7 +7,7 @@ import { DisplayArea } from "./DisplayArea.js?v=0.0.7"
 export class DisplaySubArea extends DisplayArea {
 
     constructor(parent, posx, posy, width, height) {
-        super(posx, posy, width, height)
+        super(posx, posy, width, height, parent.mobile)
         this.parent = parent
     }
 

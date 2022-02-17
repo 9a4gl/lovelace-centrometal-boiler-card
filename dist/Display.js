@@ -3,7 +3,7 @@ import { DisplayArea } from "./DisplayArea.js?v=0.0.18"
 export class Display extends DisplayArea {
 
     constructor(card, posx, posy, width, height) {
-        super(posx, posy, width, height)
+        super(posx, posy, width, height, card.mobile)
         this.card = card
         this.config = card.config
         this.parameters = {}
@@ -90,7 +90,7 @@ export class Display extends DisplayArea {
         return false;
     }
 
-    formatTemperature(parameter, default_value = "--") {
-        return ((parameter in this.values) && (this.values[parameter] > -45) && (this.values[parameter] < 145)) ? this.values[parameter] : default_value
+    formatTemperature(parameter, default_value = "--", max_value = 145) {
+        return ((parameter in this.values) && (this.values[parameter] > -45) && (this.values[parameter] < max_value)) ? this.values[parameter] : default_value
     }
 }
