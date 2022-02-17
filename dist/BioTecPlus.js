@@ -109,7 +109,7 @@ export class BioTecPlusDisplay extends Display {
             )}
 
             <!-- Firefox temperature -->
-            ${this.createText(this.formatTemperature("firebox_temperature") + "°C", 30, "color: #000000;", 65, 510, null, null, 4, null, "firebox_temperature")}
+            ${this.createText(this.formatTemperature("firebox_temperature", "--", 1000) + "°C", 30, "color: #000000;", 65, 510, null, null, 4, null, "firebox_temperature")}
 
             <!-- Glow -->
             ${this.conditional(
