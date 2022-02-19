@@ -61,7 +61,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
 
         if (this.values["boiler_state"] == "-") {
             return this.createCard("cmpelet/peletsetdisplay-clean.png",
-                html`${this.createText("Boiler unavailable", 36, "color: #ffffff;", 360, 50)}`)
+                html`${this.createText("Boiler unavailable", 36, "color: #ffffff;", 390, 30)}`)
         }
 
         return this.createCard("cmpelet/peletsetdisplay-clean.png", html`
