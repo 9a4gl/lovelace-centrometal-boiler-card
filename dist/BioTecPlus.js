@@ -132,7 +132,7 @@ export class BioTecPlusDisplay extends DisplayWithPowerButton {
                 this.createImage("transparent.png", 442, 465, 64, null, 2, "boiler_pump"))}
 
             <!-- Flue gas temperature -->
-            ${this.createText(this.formatTemperature("flue_gas") + "°C", 28, "color: #FFFFFF;",  5, 15, null, null, 5, null, "flue_gas")}
+            ${this.createText(this.formatTemperature("flue_gas") + "°C", 28, "color: #FFFFFF;",  5, 15, null, null, 8, null, "flue_gas")}
             ${this.createImage("peltec/senzor_b_1.png", 120, 34, 40, null, 8)}
 
             <!-- Oxygen (lambda) sensor -->
@@ -141,7 +141,7 @@ export class BioTecPlusDisplay extends DisplayWithPowerButton {
                 html`${this.createImage("peltec/senzor_b_2.png", 75, 35, 40, null, 8)}
                      ${this.createText(html`
                         ${this.values["lambda_sensor"] < 25.4 ? this.values["lambda_sensor"] : "-.-"}%`, 28,
-                         "color: #ffffff; text-align: center;", 175, 30, null, null, 5, null, "lambda_sensor")}`)}
+                         "color: #ffffff; text-align: center;", 175, 30, null, null, 8, null, "lambda_sensor")}`)}
 
             <!-- Pellet tank level -->
             ${this.conditional(
@@ -241,12 +241,12 @@ export class BioTecPlusDisplay extends DisplayWithPowerButton {
                     <!- Pump -->
                     ${this.conditional(
                         this.values["second_pump_demand"] == 1,
-                        this.dhwBufferArea.createImage("peltec/demand_p.png", 5, 199, 12, null, 5, "second_pump_demand"),
-                        this.dhwBufferArea.createImage("transparent.png", 5, 199, 12, null, 5, "second_pump_demand"))}
+                        this.dhwBufferArea.createImage("peltec/demand_p.png", 5, 199, 12, null, 6, "second_pump_demand"),
+                        this.dhwBufferArea.createImage("transparent.png", 5, 199, 12, null, 6, "second_pump_demand"))}
                     ${this.conditional(
                         this.values["second_pump"] == 1,
                         this.dhwBufferArea.createImage("peltec/pumpaokrece.gif", 4, 172, 64, null, 5, "second_pump"),
-                        this.dhwBufferArea.createImage("transparent.png", 4, 172, 64, null, 2, "second_pump"))}
+                        this.dhwBufferArea.createImage("transparent.png", 4, 172, 64, null, 5, "second_pump"))}
             `))
     }
 }
