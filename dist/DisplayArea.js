@@ -37,8 +37,7 @@ export class DisplayArea {
                 str += " left: " + left + ";";
             } else {
                 if (padding != -1) {
-                    str += " padding-left:" + this.asPercentage(padding, this.width);
-                    str += " padding-right:" + this.asPercentage(padding, this.width);
+                    str += " padding:" + this.asPercentage(padding, this.area_width);
                     left -= padding;
                 }
                 str += " left: " + this.asPercentage(left, this.area_width);
@@ -49,8 +48,6 @@ export class DisplayArea {
                 str += " top: " + top + ";";
             } else {
                 if (padding != -1) {
-                    str += " padding-top:" + this.asPercentage(padding, this.area_height);
-                    str += " padding-bottom:" + this.asPercentage(padding, this.area_height);
                     top -= padding;
                 }
                 str += " top: " + this.asPercentage(top, this.area_height);
@@ -104,7 +101,7 @@ export class DisplayArea {
     createText(text, font_size, style, left, top, width = null, height = null, zindex = 2, padding = null, entity = "")
     {
         this.updateScalingFactor()
-        padding = (padding == null) ? 10 : padding
+        padding = (padding == null) ? -1 : padding
         const onClickFunction = () => {
             const display = this.getDisplay(this)
             if ((entity !== "") && (entity in display.values)) {

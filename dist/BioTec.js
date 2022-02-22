@@ -13,36 +13,36 @@ export class BioTecDisplay extends Display {
 
     configureDisplay() {
         try {
-            this.configureParameter("sensor.biotec", "boiler_state")
-            this.configureParameter("sensor.biotec", "fan")
-            this.configureParameter("sensor.biotec", "air_flow_engine_primary")
-            this.configureParameter("sensor.biotec", "air_flow_engine_secondary")
-            this.configureParameter("sensor.biotec", "boiler_temperature")
-            this.configureParameter("sensor.biotec", "firebox_temperature")
-            this.configureParameter("sensor.biotec", "glow")
-            this.configureParameter("sensor.biotec", "flue_gas")
-            this.configureParameter("sensor.biotec", "configuration")
-            this.configureParameter("sensor.biotec", "boiler_pump")
-            this.configureParameter("sensor.biotec", "boiler_pump_demand")
-            this.configureParameter("sensor.biotec", "command_active")
+            this.configureParameter("sensor.biotec", "boiler_state|b_state")
+            this.configureParameter("sensor.biotec", "fan|b_fan")
+            this.configureParameter("sensor.biotec", "air_flow_engine_primary|b_pris")
+            this.configureParameter("sensor.biotec", "air_flow_engine_secondary|b_secs")
+            this.configureParameter("sensor.biotec", "boiler_temperature|b_tk1")
+            this.configureParameter("sensor.biotec", "firebox_temperature|b_tlo1")
+            this.configureParameter("sensor.biotec", "glow|b_zar")
+            this.configureParameter("sensor.biotec", "flue_gas|b_tdpl1")
+            this.configureParameter("sensor.biotec", "configuration|b_konf")
+            this.configureParameter("sensor.biotec", "boiler_pump|b_p1")
+            this.configureParameter("sensor.biotec", "boiler_pump_demand|b_zahp1")
+            this.configureParameter("sensor.biotec", "command_active|b_cmd")
 
             // optional
-            this.configureParameter("sensor.biotec", "lambda_sensor", "optional")
-            this.configureParameter("sensor.biotec", "outdoor_temperature", "optional")
-            this.configureParameter("sensor.biotec", "buffer_tank_temparature_up", "optional")
-            this.configureParameter("sensor.biotec", "buffer_tank_temparature_down", "optional")
-            this.configureParameter("sensor.biotec", "accessories_value", "optional")
-            this.configureParameter("sensor.biotec", "circuit_1_correction_type", "optional")
-            this.configureParameter("sensor.biotec", "room_measured_temperature", "optional")
-            this.configureParameter("sensor.biotec", "room_target_temperature", "optional")
-            this.configureParameter("sensor.biotec", "room_target_correction", "optional")
-            this.configureParameter("sensor.biotec", "third_pump", "optional")
-            this.configureParameter("sensor.biotec", "third_pump_demand", "optional")
-            this.configureParameter("sensor.biotec", "domestic_hot_water", "optional")
-            this.configureParameter("sensor.biotec", "second_pump", "optional")
-            this.configureParameter("sensor.biotec", "second_pump_demand", "optional")
-            this.configureParameter("sensor.biotec", "circuit_1_measured_temperature", "optional")
-            this.configureParameter("sensor.biotec", "circuit_1_target_temperature", "optional")
+            this.configureParameter("sensor.biotec", "lambda_sensor|b_oxy1", "optional")
+            this.configureParameter("sensor.biotec", "outdoor_temperature|b_tva1", "optional")
+            this.configureParameter("sensor.biotec", "buffer_tank_temparature_up|b_tak1", "optional")
+            this.configureParameter("sensor.biotec", "buffer_tank_temparature_down|b_tak2", "optional")
+            this.configureParameter("sensor.biotec", "accessories_value|b_kornum", "optional")
+            this.configureParameter("sensor.biotec", "circuit_1_correction_type|c1b_kortype", "optional")
+            this.configureParameter("sensor.biotec", "circuit_1_room_measured_temperature|c1b_tsob1", "optional")
+            this.configureParameter("sensor.biotec", "circuit_1_room_target_temperature|c1b_tsob", "optional")
+            this.configureParameter("sensor.biotec", "circuit_1_room_target_correction|c1b_kor", "optional")
+            this.configureParameter("sensor.biotec", "third_pump|b_p3", "optional")
+            this.configureParameter("sensor.biotec", "third_pump_demand|b_zahp3", "optional")
+            this.configureParameter("sensor.biotec", "domestic_hot_water|b_tptv1", "optional")
+            this.configureParameter("sensor.biotec", "second_pump|b_p2", "optional")
+            this.configureParameter("sensor.biotec", "second_pump_demand|b_zahp2", "optional")
+            this.configureParameter("sensor.biotec", "circuit_1_flow_measured_temperature|c1b_tpol1", "optional")
+            this.configureParameter("sensor.biotec", "circuit_1_flow_target_temperature|c1b_tpol", "optional")
 
         } catch (error) {
             return error;
@@ -150,13 +150,13 @@ export class BioTecDisplay extends Display {
             ${this.conditional(this.hexBitIsSet(this.values["configuration"], 4),
                 this.conf_bit_4.createSubArea(1, "",
                     html`
-                        ${this.conditional("circuit_1_measured_temperature" in this.values,
-                            this.conf_bit_4.createText(this.values["circuit_1_measured_temperature"] + "°C", 25, "color: #ffffff; text-align: center;",
-                                10, -40, null, null, 1, null, "circuit_1_measured_temperature")
+                        ${this.conditional("circuit_1_flow_measured_temperature" in this.values,
+                            this.conf_bit_4.createText(this.values["circuit_1_flow_measured_temperature"] + "°C", 25, "color: #ffffff; text-align: center;",
+                                10, -40, null, null, 1, null, "circuit_1_flow_measured_temperature")
                         )}
-                        ${this.conditional("circuit_1_target_temperature" in this.values,
-                            this.conf_bit_4.createText(this.values["circuit_1_target_temperature"] + "°C", 20, "color: #ff9900; text-align: center;",
-                                110, -40, null, null, 1, null, "circuit_1_target_temperature")
+                        ${this.conditional("circuit_1_flow_target_temperature" in this.values,
+                            this.conf_bit_4.createText(this.values["circuit_1_flow_target_temperature"] + "°C", 20, "color: #ff9900; text-align: center;",
+                                110, -40, null, null, 1, null, "circuit_1_flow_target_temperature")
                         )}
                         ${this.conf_bit_4.createImage("biotec/pipeline_0.png", 0, 0, 101, "auto", 1)}
                         ${this.conf_bit_4.createImage("peltec/senzorDugi.png", 80, -22, 20, "auto", 1)}
@@ -179,22 +179,22 @@ export class BioTecDisplay extends Display {
                             ("circuit_1_correction_type" in this.values && this.values["circuit_1_correction_type"] != 0),
                             this.conf_bit_01.createImage("peltec/korektorCm2k.png", 150, 30, 30, "auto", 2))}
                         ${this.conditional(
-                            ("room_measured_temperature" in this.values) &&
+                            ("circuit_1_room_measured_temperature" in this.values) &&
                             ("circuit_1_correction_type" in this.values && this.values["circuit_1_correction_type"] != 0),
-                            this.conf_bit_01.createText(this.values["room_measured_temperature"] + "°C", 22, "color: #ffffff; text-align: right;",
-                                290, 105, null, null, 2, null, "room_measured_temperature"))}
+                            this.conf_bit_01.createText(this.values["circuit_1_room_measured_temperature"] + "°C", 22, "color: #ffffff; text-align: right;",
+                                290, 105, null, null, 2, null, "circuit_1_room_measured_temperature"))}
                         ${this.conditional(
                             ("circuit_1_correction_type" in this.values && this.values["circuit_1_correction_type"] != 0),
                             this.conf_bit_01.createImage("peltec/termometarCm2k.png", 250, 95, 30, "auto", 2))}
                         ${this.conditional(
-                            ("room_target_temperature" in this.values) &&
+                            ("circuit_1_room_target_temperature" in this.values) &&
                             this.hexBitIsClear(this.values["configuration"], 3),
-                            this.conf_bit_01.createText(this.values["room_target_temperature"] + "°C", 18, "color: #ff9900; text-align: right;",
-                                190, 35, null, null, 2, null, "room_target_temperature"))}
+                            this.conf_bit_01.createText(this.values["circuit_1_room_target_temperature"] + "°C", 18, "color: #ff9900; text-align: right;",
+                                190, 35, null, null, 2, null, "circuit_1_room_target_temperature"))}
                         ${this.conditional(
-                            ("circuit_1_correction_type" in this.values) && ("room_target_correction" in this.values) && this.values["circuit_1_correction_type"] == 1,
-                            this.conf_bit_01.createText("+" + this.values["room_target_correction"] + "°C", 22, "color: #ff9900; text-align: left;",
-                                255, 35, null, null, 2, null, "room_target_correction"))}
+                            ("circuit_1_correction_type" in this.values) && ("circuit_1_room_target_correction" in this.values) && this.values["circuit_1_correction_type"] == 1,
+                            this.conf_bit_01.createText("+" + this.values["circuit_1_room_target_correction"] + "°C", 22, "color: #ff9900; text-align: left;",
+                                255, 35, null, null, 2, null, "circuit_1_room_target_correction"))}
                         <!-- pump -->
                         ${this.conditional(
                             this.values["third_pump_demand"] == 1,

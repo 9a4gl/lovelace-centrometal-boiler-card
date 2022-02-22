@@ -132,7 +132,7 @@ export class BioTecPlusDisplay extends DisplayWithPowerButton {
                 this.createImage("transparent.png", 442, 465, 64, null, 2, "boiler_pump"))}
 
             <!-- Flue gas temperature -->
-            ${this.createText(this.formatTemperature("flue_gas") + "°C", 28, "color: #FFFFFF;",  5, 15, null, null, 8, null, "flue_gas")}
+            ${this.createText(this.formatTemperature("flue_gas", "--", 1000) + "°C", 28, "color: #FFFFFF;",  5, 15, null, null, 8, null, "flue_gas")}
             ${this.createImage("peltec/senzor_b_1.png", 120, 34, 40, null, 8)}
 
             <!-- Oxygen (lambda) sensor -->
