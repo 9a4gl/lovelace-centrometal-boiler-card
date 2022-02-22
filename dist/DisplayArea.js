@@ -88,7 +88,7 @@ export class DisplayArea {
             image = image.substring(0, image.length - 1);
             style += " pointer-events: none;"
         }
-        image = this.images_folder + image + "?v=0.0.20";
+        image = this.images_folder + image + "?v=0.0.21";
         return html`<img src="${image}" style="${style}" @click=${onClickFunction} />`;
     }
 
