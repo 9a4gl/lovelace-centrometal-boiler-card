@@ -118,7 +118,7 @@ export class BioTecPlusDisplay extends DisplayWithPowerButton {
             <!-- Glow -->
             ${this.conditional(
                 this.values["glow"] == 1,
-                this.createImage("biotec/glow.png", 65, 435, 100, "auto", 3, "glow")
+                this.createImage("biotec/glow.png", 65, 435, 100, null, 3, "glow")
             )}
 
             <!- Pump -->

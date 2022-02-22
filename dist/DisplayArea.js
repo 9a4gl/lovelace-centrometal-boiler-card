@@ -10,7 +10,7 @@ export class DisplayArea {
         this.area_width = width;
         this.area_height = height;
         this.mobile = mobile
-        this.scale_factor = 468 / 1024; // Used for font scaling
+        this.scale_factor = 468.0 / 1024.0; // Used for font scaling
         this.images_folder = "/local/community/lovelace-centrometal-boiler-card/images/"
     }
 
@@ -19,7 +19,7 @@ export class DisplayArea {
     }
 
     asPercentage(pos, full) {
-        return (100.0 * pos / full).toString() + "%;";
+        return (100.0 * parseFloat(pos) / parseFloat(full)).toString() + "%;";
     }
 
     hexBitIsSet(firstNumber, secondNumber) {
@@ -37,7 +37,8 @@ export class DisplayArea {
                 str += " left: " + left + ";";
             } else {
                 if (padding != -1) {
-                    str += " padding:" + this.asPercentage(padding, this.area_width);
+                    str += " padding-left:" + this.asPercentage(padding, this.width);
+                    str += " padding-right:" + this.asPercentage(padding, this.width);
                     left -= padding;
                 }
                 str += " left: " + this.asPercentage(left, this.area_width);
@@ -48,6 +49,8 @@ export class DisplayArea {
                 str += " top: " + top + ";";
             } else {
                 if (padding != -1) {
+                    str += " padding-top:" + this.asPercentage(padding, this.area_height);
+                    str += " padding-bottom:" + this.asPercentage(padding, this.area_height);
                     top -= padding;
                 }
                 str += " top: " + this.asPercentage(top, this.area_height);
@@ -88,7 +91,7 @@ export class DisplayArea {
             image = image.substring(0, image.length - 1);
             style += " pointer-events: none;"
         }
-        image = this.images_folder + image + "?v=0.0.16";
+        image = this.images_folder + image + "?v=0.0.20";
         return html`<img src="${image}" style="${style}" @click=${onClickFunction} />`;
     }
 
