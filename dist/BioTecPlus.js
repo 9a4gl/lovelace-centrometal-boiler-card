@@ -31,6 +31,7 @@ export class BioTecPlusDisplay extends DisplayWithPowerButton {
             this.configureParameter("sensor.biotec", "wood_pellet_mode|b_pbs")
             this.configureParameter("sensor.biotec", "control_mode|b_scs")
             this.configureParameter("sensor.biotec", "configuration|b_konf")
+            this.configureParameter("sensor.biotec", "take_over|b_preuz")
 
             // optional
             this.configureParameter("sensor.biotec", "outdoor_temperature|b_tva1", "optional")
@@ -180,6 +181,12 @@ export class BioTecPlusDisplay extends DisplayWithPowerButton {
             <!-- Wood or pellet selection -->
             ${this.showWoodAndPelletSelection()}
 
+            <!-- Show boiler not available if necessary -->
+            ${this.showBoilerNotAvailable()}
+
+            <!-- Show boiler not available if necessary -->
+            ${this.showTakeOver()}
+
             <!-- Boiler power button -->
             ${this.createPowerButton(function (root) { this.turnBioTecPlusPelletOn(root); }, function (root) { this.turnBioTecPlusPelletOff(root); })}
 
@@ -249,4 +256,52 @@ export class BioTecPlusDisplay extends DisplayWithPowerButton {
                         this.dhwBufferArea.createImage("transparent.png", 4, 172, 64, null, 5, "second_pump"))}
             `))
     }
+
+    showBoilerNotAvailable() {
+        this.boilerNotAvailable = new DisplaySubArea(this, 400, 10, 400, 60);
+        return this.conditional(this.values["control_mode"] == 2,
+                this.boilerNotAvailable.createSubArea(5, "border: solid 1px; border-color: black; border-radius: 10px 10px 10px 10px; background-color: red; opacity: 0.9;",
+                    html`
+                    ${this.boilerNotAvailable.createText(
+                        "Temporarily disabled access to the boiler!",
+                        18, "font-weight: bold; color: #ffffff; text-align: left;",
+                        20, 20, null, null, 6, null)}
+                `))
+    }
+
+    showTakeOver() {
+        this.takeOver = new DisplaySubArea(this, 900, 160, 120, 170);
+        return html`
+            ${this.createText(html`<b><u>TAKING OVER:</u></b>`, 16, "font-weight: bold; color: #bddede; text-align: left;",
+                905, 150, null, null, 6, null)}
+            ${this.conditional(
+                this.values["wood_pellet_mode"] == 0 && this.values["control_mode"] == 1,
+                this.takeOver.createSubArea(1, "", html`
+                    ${this.conditional(this.values["take_over"] != 0,
+                        this.takeOver.createImage("biopl/taking_off.png", 10, 20, 100, null, 4))}
+                    ${this.conditional(this.values["take_over"] != 1,
+                        this.takeOver.createImage("biopl/taking_pellet_on.png", 10, 70, 100, null, 4))}
+                    ${this.conditional(this.values["take_over"] != 2,
+                        this.takeOver.createImage("biopl/taking_pellet_off.png", 10, 120, 100, null, 4))}
+                    ${this.conditional(this.values["take_over"] == 0,
+                        this.takeOver.createImage("biopl/taking_off_active.png", 10, 20, 100, null, 4))}
+                    ${this.conditional(this.values["take_over"] == 1,
+                        this.takeOver.createImage("biopl/taking_pellet_on_active.png", 10, 70, 100, null, 4))}
+                    ${this.conditional(this.values["take_over"] == 2,
+                        this.takeOver.createImage("biopl/taking_pellet_off_active.png", 10, 120, 100, null, 4))}
+                `)
+            )}
+            ${this.conditional(
+                this.values["wood_pellet_mode"] == 1 || this.values["control_mode"] != 1,
+                this.takeOver.createSubArea(2, "", html`
+                    ${this.takeOver.createImage("biopl/taking_off_forbiden.png", 10, 20, 100, null, 4)}
+                    ${this.takeOver.createImage("biopl/taking_pellet_on_forbiden.png", 10, 70, 100, null, 4)}
+                    ${this.takeOver.createImage("biopl/taking_pellet_off_forbiden.png", 10, 120, 100, null, 4)}
+                `)
+            )}
+            ${this.conditional(this.values["take_over"] > 0,
+                this.takeOver.createImage("biopl/arrow_green.png", 208, 88, 30, "auto", 12))}
+            `
+    }
+
 }
