@@ -15,10 +15,10 @@ export class DisplaySubArea extends DisplayArea {
         return html`
         <div style="${this.createStyle(
             "z-index: " + z + "; " + extraStyle,
-            this.asPercentage(this.area_posx, this.parent.area_width),
-            this.asPercentage(this.area_posy, this.parent.area_height),
-            this.asPercentage(this.area_width, this.parent.area_width),
-            this.asPercentage(this.area_height, this.parent.area_height))}">
+            this.parent.getDimensionX(this.area_posx),
+            this.parent.getDimensionY(this.area_posy),
+            this.parent.getDimensionX(this.area_width),
+            this.parent.getDimensionY(this.area_height))}">
             ${content}
         </div>`
     }

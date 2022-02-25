@@ -7,6 +7,8 @@ export class DisplayArea {
     constructor(posx, posy, width, height, mobile) {
         this.area_posx = posx
         this.area_posy = posy
+        this.width = width;
+        this.height = height;
         this.area_width = width;
         this.area_height = height;
         this.mobile = mobile
@@ -18,8 +20,16 @@ export class DisplayArea {
         return (typeof obj === 'string' || obj instanceof String)
     }
 
-    asPercentage(pos, full) {
-        return (100.0 * parseFloat(pos) / parseFloat(full)).toString() + "%;";
+    asPixel(pos, dimension, area_dimension) {
+        return (pos * dimension / area_dimension).toString() + "px;";
+    }
+
+    getDimensionX(pos, correction = 1.00) {
+        return this.asPixel(parseFloat(pos) * correction, parseFloat(this.width), parseFloat(this.area_width))
+    }
+
+    getDimensionY(pos, correction = 1.00) {
+        return this.asPixel(parseFloat(pos) * correction, parseFloat(this.height), parseFloat(this.area_height))
     }
 
     hexBitIsSet(firstNumber, secondNumber) {
@@ -37,10 +47,10 @@ export class DisplayArea {
                 str += " left: " + left + ";";
             } else {
                 if (padding != -1) {
-                    str += " padding:" + this.asPercentage(padding, this.area_width);
+                    str += " padding:" + this.getDimensionX(padding);
                     left -= padding;
                 }
-                str += " left: " + this.asPercentage(left, this.area_width);
+                str += " left: " + this.getDimensionX(left);
             }
         }
         if (top != null) {
@@ -50,7 +60,7 @@ export class DisplayArea {
                 if (padding != -1) {
                     top -= padding;
                 }
-                str += " top: " + this.asPercentage(top, this.area_height);
+                str += " top: " + this.getDimensionY(top);
             }
         }
         if (width != null) {
@@ -59,7 +69,7 @@ export class DisplayArea {
             } else if (this.isString(width)) {
                 str += " width: " + width + ";";
             } else {
-                str += " width: " + this.asPercentage(width, this.area_width);
+                str += " width: " + this.getDimensionX(width);
             }
         }
         if (height != null) {
@@ -68,15 +78,24 @@ export class DisplayArea {
             } else if (this.isString(height)) {
                 str += " height: " + height + ";";
             } else {
-                str += " height: " + this.asPercentage(height, this.area_height);
+                str += " height: " + this.getDimensionY(height);
             }
         }
         str += styleEnd;
         return str;
     }
 
+    updateGeometryFromParent() {
+        if (typeof this.parent !== 'undefined') {
+            this.scale_factor = this.parent.scale_factor
+            this.width = this.parent.width / this.parent.area_width * this.area_width
+            this.height = this.parent.height / this.parent.area_height * this.area_height
+        }
+    }
+
     createImage(image, left, top, width, height, zindex = 1, entity = "")
     {
+        this.updateGeometryFromParent()
         const onClickFunction = () => {
             const display = this.getDisplay(this)
             if ((entity !== "") && (entity in display.values)) {
@@ -92,15 +111,9 @@ export class DisplayArea {
         return html`<img src="${image}" style="${style}" @click=${onClickFunction} />`;
     }
 
-    updateScalingFactor() {
-        if (typeof this.parent !== 'undefined') {
-            this.scale_factor = this.parent.scale_factor
-        }
-    }
-
     createText(text, font_size, style, left, top, width = null, height = null, zindex = 2, padding = null, entity = "")
     {
-        this.updateScalingFactor()
+        this.updateGeometryFromParent()
         padding = (padding == null) ? -1 : padding
         const onClickFunction = () => {
             const display = this.getDisplay(this)
@@ -119,10 +132,10 @@ export class DisplayArea {
     }
 
     createCard(background_image, content) {
-        this.updateScalingFactor()
+        this.updateGeometryFromParent()
         return html`
         <div class="card-content" style="position: relative; top: 0; left: 0; padding: 0px; width: auto; height: auto; line-height: ${26 * this.scale_factor}px;">
-            <img src="${this.images_folder}${background_image}?v=0.0.16" style="width: 100%; top: 0; left: 0; position: relative; border-radius: var(--ha-card-border-radius, 4px);" />
+            <img src="${this.images_folder}${background_image}?v=0.0.21" style="width: 100%; top: 0; left: 0; position: relative; border-radius: var(--ha-card-border-radius, 4px);" />
             ${content}
         </div>`;
     }
