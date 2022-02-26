@@ -17,13 +17,14 @@ class LovelaceCentrometalBoilerCard extends LitElement {
     this.mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
     this.observer = new ResizeObserver(entries => {
       entries.forEach(entry => {
+        if (this.display != null) {
+          this.display.scale_factor = entry.contentRect.height / this.display.area_height
+          this.display.width = entry.contentRect.width;
+          this.display.height = entry.contentRect.height;
+        }
         this.width = entry.contentRect.width
         this.height = entry.contentRect.height
-        if (this.display != null) {
-          this.display.height = this.height;
-          this.display.width = this.width;
-          this.display.scale_factor = this.height / 600.0
-        }
+        // console.log("Size ", this.width, "x", this.height)
       })
     }).observe(this)
   }
