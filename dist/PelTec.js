@@ -111,10 +111,10 @@ export class PelTecDisplay extends DisplayWithPowerButton {
                 html`${this.createImage("peltec/senzor_b_1.png", 90, 90, 50, null)}
                      ${this.createText(html`
                         ${this.values["lambda_sensor"] < 25.4 ? this.values["lambda_sensor"] : "-"}% O<sub>2</sub>`, 20, "color: #e0e3ff;",
-                         155, 90 + 2, null, null, 2, null, "lambda_sensor")}`)}
+                         155, 90, null, null, 2, null, "lambda_sensor")}`)}
 
             <!-- Mixer temperature -->
-            ${this.createText(this.values["mixer_temperature"] + " °C", 26, "color: #FFFFFF;", 460, 262, 80 + 20, null, 2, null, "mixer_temperature")}
+            ${this.createText(this.values["mixer_temperature"] + " °C", 26, "color: #FFFFFF;", 460, 262, 80, null, 2, null, "mixer_temperature")}
 
             <!-- Mixing valve opening -->
             ${this.createText(this.values["mixing_valve"] + "%", 22, "color: #ffffff;", 340, 139, 80, null, 2, null, "mixing_valve")}
@@ -174,7 +174,7 @@ export class PelTecDisplay extends DisplayWithPowerButton {
             ${this.conditional(
                 this.values["boiler_state"] === "OFF",
                 this.createText("", 32,
-                "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "peltec/start_stop.png?v=0.0.16'); background-position: 0px 0px;",
+                "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "peltec/start_stop.png?v=0.0.21'); background-position: 0px 0px;",
                 945, 390, 36, 36, 2, -1))}
             ${this.conditional(
                 this.values["command_active"] == 0 && this.values["boiler_state"] !== "OFF",
