@@ -10,9 +10,19 @@ export class Display extends DisplayArea {
         this.values = {}
         this.values_if_missing = {}
         this.card_id = "id_" + Math.random().toString(16).slice(2)
+        this.prefix = ""
+        if ("prefix" in this.config) {
+            this.prefix = this.config["prefix"]
+            if (this.prefix.endsWith("_") == false) {
+                this.prefix = this.prefix + "_"
+            }
+        }
     }
 
     configureParameter(starts_with, name, opt = "", value_if_missing = null) {
+        if (this.prefix !== "") {
+            starts_with = starts_with.replace(".", "." + this.prefix)
+        }
         var alternative_name = null
         if (name.includes("|")) {
             const array = name.split("|")
