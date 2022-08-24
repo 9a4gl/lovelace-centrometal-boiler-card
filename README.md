@@ -1,5 +1,7 @@
 # lovelace-centrometal-boiler-card
 
+Home assistant lovelace card to support Centrometal (https://www.centrometal.hr/) boiler with WiFi integration into Home Assistant (a free and open-source software for home automation designed to be a central control system for smart home devices with a focus on local control and privacy).
+
 ```
 type: custom:centrometal-boiler-card
 device_type: peltec | cmpelet | biotec | biopl (optional)
