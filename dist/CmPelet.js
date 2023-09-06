@@ -37,7 +37,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter("sensor.cm_pelet", "b_smd", "optional", 0)
             this.configureParameter("sensor.cm_pelet", "freeze_guard", "optional")
             this.configureParameter("sensor.cm_pelet", "freeze_monitor", "optional")
-            this.configureParameter("sensor.cm_pelet", "B_Tptv1", "optional")
+            this.configureParameter("sensor.cm_pelet", "b_tptv1", "optional")
 
             // Service
             this.configureParameter("switch.cm_pelet", "boiler_switch")
@@ -298,8 +298,8 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
 
                     ${this.a02area.createText("M", 28, "color: #ffffff; text-align: center;", 140, 65)}
                     ${this.conditional(
-                        "B_Tptv1" in this.values,
-                        this.a02area.createText(this.values["B_Tptv1"] + " °C", 32, "color: #0000ff;", 190, 275, null, null, 3, null, "B_Tptv1")
+                        "b_tptv1" in this.values,
+                        this.a02area.createText(this.values["b_tptv1"] + " °C", 32, "color: #0000ff;", 190, 275, null, null, 3, null, "b_tptv1")
                     )}
                 `))}
 
