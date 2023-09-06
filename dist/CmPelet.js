@@ -289,17 +289,17 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
                         this.a02area.createText(this.values["buffer_tank_down"] + " °C", 32, "color: #0000ff;", 190, 478, null, null, 3, null, "buffer_tank_down")
                     )}
                     ${this.a02area.createImage("cmpelet/g00_cjevovod.png", 0, 280, 160, "auto", 2)}
-                    ${this.a02area.createImage("cmpelet/pumpaStojiLijevo.png", 15, 457, 64, null, 3, "boiler_pump")}
+                    ${this.a02area.createImage("cmpelet/pumpaStojiLijevo.png", 15, 478, 64, null, 3, "boiler_pump")}
                     ${this.conditional(
                         "boiler_pump" in this.values && this.values["boiler_pump"] == 1,
-                        this.a02area.createImage("cmpelet/pumpaokrece.gif", 15, 457, 64, null, 4, "boiler_pump")
+                        this.a02area.createImage("cmpelet/pumpaokrece.gif", 15, 478, 64, null, 4, "boiler_pump")
                     )}
-                    ${this.a02area.createImage("cmpelet/senzor_vodoravni.png", 80, 60, 45, null, 3)}
+                    ${this.a02area.createImage("cmpelet/senzor_vodoravni.png", 80, 450, 45, null, 3)}
 
-                    ${this.a02area.createText("M", 28, "color: #ffffff; text-align: center;", 140, 65)}
+                    ${this.a02area.createText("M", 28, "color: #ffffff; text-align: center;", 120, 400)}
                     ${this.conditional(
                         "b_tptv1" in this.values,
-                        this.a02area.createText(this.values["b_tptv1"] + " °C", 32, "color: #0000ff;", 190, 275, null, null, 3, null, "b_tptv1")
+                        this.a02area.createText(this.values["b_tptv1"] + " °C", 32, "color: #ffffff;", 100, 478, null, null, 3, null, "b_tptv1")
                     )}
                 `))}
 
