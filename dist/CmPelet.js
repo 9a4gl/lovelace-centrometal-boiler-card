@@ -294,12 +294,12 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
                         "boiler_pump" in this.values && this.values["boiler_pump"] == 1,
                         this.a02area.createImage("cmpelet/pumpaokrece.gif", 15, 483, 64, null, 4, "boiler_pump")
                     )}
-                    ${this.a02area.createImage("cmpelet/senzor_vodoravni.png", 80, 450, 45, null, 3)}
+                    ${this.a02area.createImage("cmpelet/senzor_vodoravni.png", 82, 450, 45, null, 3)}
 
-                    ${this.a02area.createText("M", 28, "color: #ffffff; text-align: center;", 120, 350)}
+                    ${this.a02area.createText("M", 28, "color: #ffffff; text-align: center;", 118, 345)}
                     ${this.conditional(
                         "b_tptv1" in this.values,
-                        this.a02area.createText(this.values["b_tptv1"] + " °C", 28, "color: #ffffff;", 100, 490, null, null, 3, null, "b_tptv1")
+                        this.a02area.createText(this.values["b_tptv1"] + " °C", 26, "color: #ffffff;", 100, 490, null, null, 3, null, "b_tptv1")
                     )}
                 `))}
 
