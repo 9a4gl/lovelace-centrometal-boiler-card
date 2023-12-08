@@ -2,8 +2,8 @@ import {
     html,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.22"
-import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js?v=0.0.22"
+import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.24"
+import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js?v=0.0.24"
 
 export class BioTecPlusDisplay extends DisplayWithPowerButton {
 
@@ -171,7 +171,7 @@ export class BioTecPlusDisplay extends DisplayWithPowerButton {
             ${this.conditional(this.values["boiler_state"] != "OFF",
                 this.createImage("peltec/playradi.gif", 942, 390, 40, null, 4, "boiler_state"),
                 this.createText("", 32,
-                    "display:block;background-repeat: no-repeat; background-image: url('/img/start_stop.png'); background-position: 0px 0px;",
+                    "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "img/start_stop.png?v=0.0.24'); background-position: 0px 0px;",
                     945, 390, 36, 36, 4, null, "boiler_state"))}
 
             <!-- Buffers -->

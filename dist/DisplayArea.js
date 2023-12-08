@@ -14,6 +14,7 @@ export class DisplayArea {
         this.mobile = mobile
         this.scale_factor = 468.0 / 1024.0; // Used for font scaling
         this.images_folder = "/local/community/lovelace-centrometal-boiler-card/images/"
+        // this.images_folder = "/local/lovelace-centrometal-boiler-card/dist/images/"
     }
 
     isString(obj) {
@@ -107,7 +108,7 @@ export class DisplayArea {
             image = image.substring(0, image.length - 1);
             style += " pointer-events: none;"
         }
-        image = this.images_folder + image + "?v=0.0.22";
+        image = this.images_folder + image + "?v=0.0.24";
         return html`<img src="${image}" style="${style}" @click=${onClickFunction} />`;
     }
 
@@ -135,7 +136,7 @@ export class DisplayArea {
         this.updateGeometryFromParent()
         return html`
         <div class="card-content" style="position: relative; top: 0; left: 0; padding: 0px; width: auto; height: auto; line-height: ${26 * this.scale_factor}px;">
-            <img src="${this.images_folder}${background_image}?v=0.0.22" style="width: 100%; top: 0; left: 0; position: relative; border-radius: var(--ha-card-border-radius, 4px); display: block;" />
+            <img src="${this.images_folder}${background_image}?v=0.0.24" style="width: 100%; top: 0; left: 0; position: relative; border-radius: var(--ha-card-border-radius, 4px); display: block;" />
             ${content}
         </div>`;
     }

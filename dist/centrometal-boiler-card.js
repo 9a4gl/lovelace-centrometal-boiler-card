@@ -3,10 +3,10 @@ import {
   LitElement,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import { PelTecDisplay } from "./PelTec.js?v=0.0.22"
-import { CmPeletDisplay } from "./CmPelet.js?v=0.0.22"
-import { BioTecDisplay } from "./BioTec.js?v=0.0.22"
-import { BioTecPlusDisplay } from "./BioTecPlus.js?v=0.0.22"
+import { PelTecDisplay } from "./PelTec.js?v=0.0.24"
+import { CmPeletDisplay } from "./CmPelet.js?v=0.0.24"
+import { BioTecDisplay } from "./BioTec.js?v=0.0.24"
+import { BioTecPlusDisplay } from "./BioTecPlus.js?v=0.0.24"
 
 class LovelaceCentrometalBoilerCard extends LitElement {
 
