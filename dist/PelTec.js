@@ -35,6 +35,9 @@ export class PelTecDisplay extends DisplayWithPowerButton {
             this.configureParameter("sensor.peltec", "accessories", "optional")
             this.configureParameter("sensor.peltec", "accessories_value", "optional")
             this.configureParameter("sensor.peltec", "operation_mode", "optional")
+            this.configureParameter("sensor.peltec", "second_pump|b_p2", "optional")
+            this.configureParameter("sensor.peltec", "second_pump_demand|b_zahp2", "optional")
+            this.configureParameter("sensor.peltec", "domestic_hot_water|b_tptv1", "optional")
 
             // Service
             this.configureParameter("switch.peltec", "boiler_switch")
@@ -44,8 +47,9 @@ export class PelTecDisplay extends DisplayWithPowerButton {
         }
 
         // define Sub areas of display
-        this.bufferArea = new DisplaySubArea(this, 520, 5, 370, 570)
+        this.bufferArea = new DisplaySubArea(this, 490, 5, 370, 570)
         this.cskTouchArea = new DisplaySubArea(this, 240, 85, 100, 50)
+        this.dhwBufferArea = new DisplaySubArea(this, 730, 180, 150, 360)
 
         return this;
     }
@@ -142,7 +146,7 @@ export class PelTecDisplay extends DisplayWithPowerButton {
 
             <!-- Buffer -->
             ${this.conditional(
-                this.values["configuration"] === "4. BUF" &&
+                this.values["configuration"].includes("BUF") &&
                 "buffer_tank_temparature_up" in this.values && "buffer_tank_temparature_down" in this.values,
                 html`${this.bufferArea.createSubArea(2, "",
                     html`${this.bufferArea.createText(this.values["buffer_tank_temparature_up"] + " °C", 32, "color: #0000ff;",
@@ -151,6 +155,24 @@ export class PelTecDisplay extends DisplayWithPowerButton {
                              100 - 30, 485, 145, null, 2, null, "buffer_tank_temparature_down")}
                          ${this.bufferArea.createImage("peltec/akunormalno.png", 60, 232, 165, "auto")}`)}`)}
 
+            <!-- DHW -->
+            ${this.conditional(
+                this.values["configuration"].includes("DHW"),
+                this.dhwBufferArea.createSubArea(1, "", html`
+                    ${this.dhwBufferArea.createImage("biopl/dhw.png", 3, 98, 138, null, 3, "")}
+                    ${this.dhwBufferArea.createText(
+                        this.formatTemperature("domestic_hot_water") + " °C", 32, "color: #0000ff; text-align: center;",
+                        48, 133, null, null, 4, null, "domestic_hot_water")}
+                        <!- Pump -->
+                        ${this.conditional(
+                            this.values["second_pump_demand"] == 1,
+                            this.dhwBufferArea.createImage("peltec/demand_p.png", 5, 199, 12, null, 6, "second_pump_demand"),
+                            this.dhwBufferArea.createImage("transparent.png", 5, 199, 12, null, 6, "second_pump_demand"))}
+                        ${this.conditional(
+                            this.values["second_pump"] == 1,
+                            this.dhwBufferArea.createImage("peltec/pumpaokrece.gif", 4, 172, 64, null, 5, "second_pump"),
+                            this.dhwBufferArea.createImage("transparent.png", 4, 172, 64, null, 5, "second_pump"))}`))}
+            
             <!-- CSK indicator -->
             ${this.conditional(
                 "accessories" in this.values && "accessories_value" in this.values && this.values["accessories_value"] != 255,
