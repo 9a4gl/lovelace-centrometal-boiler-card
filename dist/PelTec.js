@@ -2,8 +2,8 @@ import {
     html,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.24"
-import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js?v=0.0.24"
+import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.26"
+import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js?v=0.0.26"
 
 export class PelTecDisplay extends DisplayWithPowerButton {
 
@@ -172,7 +172,7 @@ export class PelTecDisplay extends DisplayWithPowerButton {
                             this.values["second_pump"] == 1,
                             this.dhwBufferArea.createImage("peltec/pumpaokrece.gif", 4, 172, 64, null, 5, "second_pump"),
                             this.dhwBufferArea.createImage("transparent.png", 4, 172, 64, null, 5, "second_pump"))}`))}
-            
+
             <!-- CSK indicator -->
             ${this.conditional(
                 "accessories" in this.values && "accessories_value" in this.values && this.values["accessories_value"] != 255,
@@ -196,7 +196,7 @@ export class PelTecDisplay extends DisplayWithPowerButton {
             ${this.conditional(
                 this.values["boiler_state"] === "OFF",
                 this.createText("", 32,
-                "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "peltec/start_stop.png?v=0.0.24'); background-position: 0px 0px;",
+                "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "peltec/start_stop.png?v=0.0.26'); background-position: 0px 0px;",
                 945, 390, 36, 36, 2, -1))}
             ${this.conditional(
                 this.values["command_active"] == 0 && this.values["boiler_state"] !== "OFF",
