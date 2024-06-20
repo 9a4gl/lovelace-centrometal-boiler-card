@@ -2,8 +2,8 @@ import {
     html,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.26"
-import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js?v=0.0.26"
+import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.27"
+import { DisplayWithPowerButton } from "./DisplayWithPowerButton.js?v=0.0.27"
 
 export class CmPeletDisplay extends DisplayWithPowerButton {
 
@@ -33,11 +33,12 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             this.configureParameter("sensor.cm_pelet", "operation_mode|b_zlj", "optional")
             this.configureParameter("sensor.cm_pelet", "boiler_operational", "optional")
             this.configureParameter("sensor.cm_pelet", "additional_features", "optional")
-            this.configureParameter("sensor.cm_pelet", "centroplus", "optional") // "b_cp"
+            this.configureParameter("sensor.cm_pelet", "centroplus|b_cp", "optional")
             this.configureParameter("sensor.cm_pelet", "b_smd", "optional", 0)
             this.configureParameter("sensor.cm_pelet", "freeze_guard", "optional")
             this.configureParameter("sensor.cm_pelet", "freeze_monitor", "optional")
             this.configureParameter("sensor.cm_pelet", "b_tpov1", "optional")
+            this.configureParameter("sensor.cm_pelet", "circuit_1_flow_measured_temperature|c1b_tpol1", "optional")
 
             // Service
             this.configureParameter("switch.cm_pelet", "boiler_switch")
@@ -101,7 +102,7 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
             ${this.conditional(
                 (this.values['b_smd'] == 0 || this.values["firmware_version"] < 'v1.25') && this.values["boiler_state"] === "OFF",
                 this.createText("", 32,
-                    "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "peltec/start_stop.png?v=0.0.26'); background-position: 0px 0px;",
+                    "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "peltec/start_stop.png?v=0.0.27'); background-position: 0px 0px;",
                 945, 390, 36, 36, 2, -1))}
             ${this.conditional(
                 (this.values['b_smd'] == 0 || this.values["firmware_version"] < 'v1.25') &&
@@ -269,8 +270,8 @@ export class CmPeletDisplay extends DisplayWithPowerButton {
                     ${this.a02area.createImage("cmpelet/krug_grijanja.png", 100, -10, 80, "auto", 3)}
                     ${this.a02area.createImage("cmpelet/senzor_vodoravni_2.png", 80, 60, 45, null, 3)}
                     ${this.a02area.createText("M", 28, "color: #ffffff; text-align: center;", 140, 65)}
-                    ${this.a02area.createText(this.formatTemperature("circuit_1_flow_temperature", "-.-") + " °C", 20, "color: #ffffff; text-align: right;",
-                        40, 87, null, null, 3, null, "circuit_1_flow_temperature")}
+                    ${this.a02area.createText(this.formatTemperature("circuit_1_flow_measured_temperature", "-.-") + " °C", 20, "color: #ffffff; text-align: right;",
+                        40, 87, null, null, 3, null, "circuit_1_flow_measured_temperature")}
                     ${this.conditional(
                         "circuit_1_pump" in this.values && this.values["circuit_1_pump"] == 1,
                         this.a02area.createImage("cmpelet/pumpaokrece.gif", 100, 11, 53, null, 4, "circuit_1_pump"),

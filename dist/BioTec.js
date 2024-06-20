@@ -2,8 +2,8 @@ import {
     html,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.26"
-import { Display } from "./Display.js?v=0.0.26"
+import { DisplaySubArea } from "./DisplaySubArea.js?v=0.0.27"
+import { Display } from "./Display.js?v=0.0.27"
 
 export class BioTecDisplay extends Display {
 
@@ -256,7 +256,7 @@ export class BioTecDisplay extends Display {
             ${this.conditional(
                 this.values["boiler_state"] === "OFF",
                 this.createText("", 32,
-                "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "img/start_stop.png?v=0.0.26'); background-position: 0px 0px;",
+                "display:block; background-repeat: no-repeat; background-image: url('" + this.images_folder + "img/start_stop.png?v=0.0.27'); background-position: 0px 0px;",
                 945, 480, 36, 36, 2, -1))}
             ${this.conditional(
                 this.values["command_active"] == 0 && this.values["boiler_state"] !== "OFF",
